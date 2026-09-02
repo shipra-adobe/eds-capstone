@@ -600,7 +600,7 @@ body.magazine-article main .section:last-of-type p > a[href$=".pdf"]:hover {
    wrapper right after the byline card. Source renders them as a row of dark #202020
    square chips (48x48) with a light glyph, right-aligned on the byline row. The icon
    font is off-domain, so each chip shows the small uppercase label instead. */
-body.magazine-article main .default-content-wrapper:has(> p > a[href^="#"]) {
+body.magazine-article main .default-content-wrapper:has(> p > a[title="Facebook"]) {
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
@@ -611,11 +611,11 @@ body.magazine-article main .default-content-wrapper:has(> p > a[href^="#"]) {
 }
 
 /* stylelint-disable-next-line no-descending-specificity */
-body.magazine-article main .default-content-wrapper:has(> p > a[href^="#"]) > p {
+body.magazine-article main .default-content-wrapper:has(> p > a[title="Facebook"]) > p {
   margin: 0;
 }
 
-body.magazine-article main .default-content-wrapper:has(> p > a[href^="#"]) a {
+body.magazine-article main .default-content-wrapper:has(> p > a[title="Facebook"]) a {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -630,7 +630,7 @@ body.magazine-article main .default-content-wrapper:has(> p > a[href^="#"]) a {
   text-decoration: none;
 }
 
-body.magazine-article main .default-content-wrapper:has(> p > a[href^="#"]) a:hover {
+body.magazine-article main .default-content-wrapper:has(> p > a[title="Facebook"]) a:hover {
   background-color: var(--dark-color, #000);
   color: var(--accent-color);
 }
