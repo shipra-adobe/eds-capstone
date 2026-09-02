@@ -86,6 +86,41 @@ var CustomImportScript = (() => {
       element.replaceWith(bylineBlock);
       return;
     }
+    if (element.matches(".cmp-teaser--secure") || element.classList.contains("cmp-teaser--secure")) {
+      const parent = element.parentElement || element;
+      const teasers = Array.from(parent.querySelectorAll(".cmp-teaser--secure"));
+      const scope = teasers.length ? teasers : [element];
+      const cellForTeaser = (teaser) => {
+        const parts = [];
+        const img = teaser.querySelector(".cmp-teaser__image img, .cmp-image img, img");
+        if (img) parts.push(img);
+        const title2 = teaser.querySelector(".cmp-teaser__title, h2, h3");
+        if (title2 && title2.textContent.trim()) parts.push(title2);
+        const desc = teaser.querySelector('.cmp-teaser__description, [class*="description"]');
+        if (desc && desc.textContent.trim()) parts.push(desc);
+        const action = teaser.querySelector('.cmp-teaser__action-link, [class*="action"] a, [class*="action"]');
+        if (action && action.textContent.trim()) {
+          const p = document2.createElement("p");
+          const href = action.getAttribute && action.getAttribute("href");
+          if (href) {
+            const a = document2.createElement("a");
+            a.setAttribute("href", href);
+            a.textContent = action.textContent.trim();
+            p.appendChild(a);
+          } else {
+            p.textContent = action.textContent.trim();
+          }
+          parts.push(p);
+        }
+        return parts.length ? parts : "";
+      };
+      const secureCells = [scope.map(cellForTeaser)];
+      const secureBlock = WebImporter.Blocks.createBlock(document2, { name: "columns", cells: secureCells });
+      const first = scope[0];
+      first.replaceWith(secureBlock);
+      scope.slice(1).forEach((t) => t.remove());
+      return;
+    }
     const image = element.querySelector(".cmp-teaser__image img, .cmp-image img, img");
     const bodyContent = [];
     const pretitle = element.querySelector('.cmp-teaser__pretitle, [class*="pretitle"]');
@@ -142,6 +177,13 @@ var CustomImportScript = (() => {
       WebImporter.DOMUtils.remove(element, [
         "div.sharing"
       ]);
+      element.querySelectorAll("a[href]").forEach((a) => {
+        const href = a.getAttribute("href");
+        if (!href) return;
+        if (/^\/[^?#]*\.html(?=$|[?#])/.test(href)) {
+          a.setAttribute("href", href.replace(/\.html(?=$|[?#])/, ""));
+        }
+      });
       const h1 = element.querySelector("h1");
       if (h1) {
         const h1Text = h1.textContent.trim().toLowerCase();

@@ -25,7 +25,7 @@ const PAGE_TEMPLATE = {
   blocks: [
     {
       name: 'columns',
-      instances: ['div.teaser.cmp-teaser--featured'],
+      instances: ['div.teaser.cmp-teaser--featured', 'div.teaser.cmp-teaser--secure'],
     },
     {
       name: 'cards',

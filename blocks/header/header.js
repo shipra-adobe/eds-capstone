@@ -66,6 +66,28 @@ export default async function decorate(block) {
     if (section) section.classList.add(`nav-${c}`);
   });
 
+  // Active nav link: mark the link whose target matches the current page so it can
+  // render as a yellow chip (source: .cmp-navigation__item--active). Normalize both
+  // sides to an extension-less, trailing-slash-free path before comparing.
+  const normalizePath = (p) => {
+    try {
+      const path = p.startsWith('http') ? new URL(p).pathname : p;
+      return path.replace(/\.html?$/, '').replace(/\/$/, '') || '/';
+    } catch { return p; }
+  };
+  // Strip a leading /content prefix (present on the local `aem up` preview, absent
+  // on published .aem.page/.aem.live) so the match works in both environments.
+  const currentPath = normalizePath(window.location.pathname).replace(/^\/content(?=\/)/, '');
+  nav.querySelectorAll('.nav-sections a[href]').forEach((a) => {
+    const linkPath = normalizePath(a.getAttribute('href'));
+    // Match exact page. Skip the site root ("Home"/"/us/en") so it isn't marked
+    // active on every deeper page.
+    if (linkPath !== '/' && (linkPath === currentPath || currentPath.endsWith(linkPath))) {
+      a.setAttribute('aria-current', 'page');
+      a.closest('li')?.classList.add('nav-active');
+    }
+  });
+
   // Brand logo: strip button wrapping so the logo renders as a plain image link
   const navBrand = nav.querySelector('.nav-brand');
   if (navBrand) {

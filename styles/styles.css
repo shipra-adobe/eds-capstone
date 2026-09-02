@@ -483,6 +483,184 @@ main .section.highlight {
   }
 }
 
+/* magazine-article element styling (source-matched; applies at all widths) */
+
+/* Pull-quote: source blockquote is plain (no border), 18px Source Sans Pro,
+   line-height 27px, indented 40px each side. */
+body.magazine-article main blockquote {
+  margin: 18px 40px;
+  padding: 0;
+  border: 0;
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 27px;
+  color: var(--text-color);
+}
+
+/* Styled pull-quote card (e.g. guide-la-skateparks): a blockquote followed by an
+   attribution paragraph (<p><u>…</u></p>). Source: grey #ebebeb box, Asar 36px/54px
+   quote, short yellow underline accent, small attribution below. Detected by the
+   attribution paragraph so the plain pull-quote (followed by an empty <p>) is unaffected. */
+body.magazine-article main blockquote:has(+ p u) {
+  margin: 32px 0 0;
+  padding: 48px 40px 24px;
+  background-color: #ebebeb;
+  border: 0;
+}
+
+body.magazine-article main blockquote:has(+ p u) p {
+  margin: 0;
+  font-family: var(--heading-font-family);
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 54px;
+  color: var(--text-color);
+}
+
+/* attribution paragraph directly under the quote — same grey box, no gap above,
+   so the two halves read as one continuous card (matches the source). */
+body.magazine-article main blockquote:has(+ p u) + p {
+  margin: 0 0 32px;
+  padding: 0 40px 48px;
+  background-color: #ebebeb;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  color: var(--text-color);
+}
+
+body.magazine-article main blockquote:has(+ p u) + p u {
+  display: block;
+  padding-top: 16px;
+  border-top: 2px solid var(--accent-color);
+  width: 120px;
+  text-decoration: none;
+}
+
+/* Download-PDF sidebar block (guide-la-skateparks): heading link, "Get the Full
+   Story", a file-meta list, and a dark download button. Source: dark button
+   #202020 with white text; meta list is small grey text. Scoped to the sidebar. */
+body.magazine-article main .section:last-of-type h3 {
+  margin: 24px 0 4px;
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+body.magazine-article main .section:last-of-type h3::after {
+  content: none;
+}
+
+/* file-meta list (Filename/Size/Format → value pairs): compact grey text, no markers */
+body.magazine-article main .section:last-of-type ul:has(li p) {
+  list-style: none;
+  margin: 4px 0 16px;
+  padding: 0;
+  font-size: 12px;
+  color: #696969;
+}
+
+body.magazine-article main .section:last-of-type ul:has(li p) li {
+  display: flex;
+  gap: 8px;
+}
+
+body.magazine-article main .section:last-of-type ul:has(li p) li p {
+  margin: 0;
+}
+
+/* hide the redundant metadata field labels (Filename/Size/Format) — source shows
+   only the values */
+body.magazine-article main .section:last-of-type ul:has(li p) li p:first-child {
+  display: none;
+}
+
+/* dark "Download PDF" button (the standalone <p><a> after the meta list) */
+body.magazine-article main .section:last-of-type p > a[href$=".pdf"] {
+  display: inline-block;
+  margin: 4px 0 24px;
+  padding: 16px 32px;
+  background-color: var(--text-color);
+  color: var(--background-color);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+body.magazine-article main .section:last-of-type p > a[href$=".pdf"]:hover {
+  background-color: var(--dark-color, #000);
+  color: var(--background-color);
+}
+
+/* Byline social links: import as stacked <p> (each a "#"-anchor) in a default-content
+   wrapper right after the byline card. Source renders them as a row of dark #202020
+   square chips (48x48) with a light glyph, right-aligned on the byline row. The icon
+   font is off-domain, so each chip shows the small uppercase label instead. */
+body.magazine-article main .default-content-wrapper:has(> p > a[href^="#"]) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: -60px;
+  margin-bottom: 32px;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+body.magazine-article main .default-content-wrapper:has(> p > a[href^="#"]) > p {
+  margin: 0;
+}
+
+body.magazine-article main .default-content-wrapper:has(> p > a[href^="#"]) a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
+  padding: 0 10px;
+  background-color: var(--text-color);
+  color: #ebebeb;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+body.magazine-article main .default-content-wrapper:has(> p > a[href^="#"]) a:hover {
+  background-color: var(--dark-color, #000);
+  color: var(--accent-color);
+}
+
+/* "SHARE THIS STORY" sidebar heading: 14px Source Sans Pro, 600, uppercase */
+body.magazine-article main .section:last-of-type h5 {
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: normal;
+  color: var(--text-color);
+}
+
+body.magazine-article main .section:last-of-type h5::after {
+  content: none;
+}
+
+/* "Up next" related-article links: source renders them as blue links */
+/* stylelint-disable-next-line no-descending-specificity */
+body.magazine-article main .section:last-of-type li a {
+  color: rgb(0 69 255);
+  text-decoration: none;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+body.magazine-article main .section:last-of-type li a:hover {
+  text-decoration: underline;
+}
+
 /* faqs two-column layout (WKND FAQs page).
    Source layout: FAQ content (heading, banner, intro, accordion) in a wide left
    column beside a "Need more help?" contact sidebar (narrow right rail), both
@@ -516,4 +694,27 @@ main .section.highlight {
     margin: 0;
     padding: 0;
   }
+}
+
+/* faqs element styling (source-matched; applies at all widths) */
+
+/* FAQs page title carries the short yellow underline accent (source: 84px #ffea00) */
+body.faqs main h1::after {
+  content: "";
+  display: block;
+  width: 84px;
+  margin-top: 12px;
+  border-bottom: 2px solid var(--accent-color);
+}
+
+/* "Need more help?" contact links (phone + email) render blue in the source */
+/* stylelint-disable-next-line no-descending-specificity */
+body.faqs main .section:last-of-type a {
+  color: rgb(0 69 255);
+  text-decoration: none;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+body.faqs main .section:last-of-type a:hover {
+  text-decoration: underline;
 }

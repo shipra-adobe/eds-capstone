@@ -100,6 +100,20 @@ var CustomImportScript = (() => {
       WebImporter.DOMUtils.remove(element, [
         "div.sharing"
       ]);
+      element.querySelectorAll("a[href]").forEach((a) => {
+        const href = a.getAttribute("href");
+        if (!href) return;
+        if (/^\/[^?#]*\.html(?=$|[?#])/.test(href)) {
+          a.setAttribute("href", href.replace(/\.html(?=$|[?#])/, ""));
+        }
+      });
+      const h1 = element.querySelector("h1");
+      if (h1) {
+        const h1Text = h1.textContent.trim().toLowerCase();
+        element.querySelectorAll("h2, h3, h4").forEach((h) => {
+          if (h.textContent.trim().toLowerCase() === h1Text) h.remove();
+        });
+      }
     }
   }
 

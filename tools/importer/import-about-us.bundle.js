@@ -42,8 +42,56 @@ var CustomImportScript = (() => {
   });
 
   // tools/importer/parsers/cards.js
+  var CONTRIBUTOR_SELECTOR = ".experiencefragment.cmp-experience-fragment--contributor";
+  var IMAGE_LIST_ITEM_SELECTOR = ".cmp-image-list__item";
   function parse(element, { document: document2 }) {
-    const CARD_SELECTOR = ".experiencefragment.cmp-experience-fragment--contributor";
+    const isImageList = !element.matches(CONTRIBUTOR_SELECTOR) && (element.matches(".image-list, .cmp-image-list") || !!element.querySelector(".cmp-image-list, .cmp-image-list__item"));
+    if (isImageList) {
+      handleImageList(element, document2);
+      return;
+    }
+    handleContributors(element, document2);
+  }
+  function handleImageList(element, document2) {
+    const items = Array.from(element.querySelectorAll(IMAGE_LIST_ITEM_SELECTOR));
+    const cells = [];
+    items.forEach((item) => {
+      const image = item.querySelector(".cmp-image-list__item-image img, .cmp-image img, img");
+      const bodyContent = [];
+      const titleLink = item.querySelector('.cmp-image-list__item-title-link, a[class*="title-link"]');
+      const titleText = item.querySelector('.cmp-image-list__item-title, [class*="item-title"]');
+      const titleLabel = titleText || titleLink;
+      if (titleLabel && titleLabel.textContent.trim()) {
+        const heading = document2.createElement("h3");
+        const href = titleLink && titleLink.getAttribute("href");
+        if (href) {
+          const a = document2.createElement("a");
+          a.setAttribute("href", href);
+          a.textContent = titleLabel.textContent.trim();
+          heading.appendChild(a);
+        } else {
+          heading.textContent = titleLabel.textContent.trim();
+        }
+        bodyContent.push(heading);
+      }
+      const description = item.querySelector('.cmp-image-list__item-description, [class*="item-description"]');
+      if (description && description.textContent.trim()) {
+        const p = document2.createElement("p");
+        p.textContent = description.textContent.trim();
+        bodyContent.push(p);
+      }
+      if (!image && !bodyContent.length) return;
+      cells.push([image || "", bodyContent.length ? bodyContent : ""]);
+    });
+    if (!cells.length) {
+      element.replaceWith(...element.childNodes);
+      return;
+    }
+    const block = WebImporter.Blocks.createBlock(document2, { name: "cards (articles)", cells });
+    element.replaceWith(block);
+  }
+  function handleContributors(element, document2) {
+    const CARD_SELECTOR = CONTRIBUTOR_SELECTOR;
     if (!element.parentElement) return;
     const prevSibling = element.previousElementSibling;
     if (prevSibling && prevSibling.matches(CARD_SELECTOR)) return;
@@ -108,6 +156,27 @@ var CustomImportScript = (() => {
         "header.cmp-experiencefragment--header",
         "footer.cmp-experiencefragment--footer"
       ]);
+      WebImporter.DOMUtils.remove(element, [
+        "ol.cmp-tabs__tablist",
+        ".cmp-tabs__tabpanel:not(.cmp-tabs__tabpanel--active)"
+      ]);
+      WebImporter.DOMUtils.remove(element, [
+        "div.sharing"
+      ]);
+      element.querySelectorAll("a[href]").forEach((a) => {
+        const href = a.getAttribute("href");
+        if (!href) return;
+        if (/^\/[^?#]*\.html(?=$|[?#])/.test(href)) {
+          a.setAttribute("href", href.replace(/\.html(?=$|[?#])/, ""));
+        }
+      });
+      const h1 = element.querySelector("h1");
+      if (h1) {
+        const h1Text = h1.textContent.trim().toLowerCase();
+        element.querySelectorAll("h2, h3, h4").forEach((h) => {
+          if (h.textContent.trim().toLowerCase() === h1Text) h.remove();
+        });
+      }
     }
   }
 

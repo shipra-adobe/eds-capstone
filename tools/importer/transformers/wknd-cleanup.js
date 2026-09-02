@@ -162,12 +162,18 @@ export default function transform(hookName, element, payload) {
       'div.sharing',
     ]);
 
-    // magazine only: the "Members Only" teasers are gated (.cmp-teaser--secure). The
-    // source hides their images behind the paywall — only the title, description and a
-    // "Read More" affordance show. Our import otherwise emits the teaser image full-width,
-    // which doesn't match the source. Remove images inside secure teasers so the migrated
-    // gated cards are text-only like the source. Narrow class (no-op on other templates).
-    element.querySelectorAll('.cmp-teaser--secure img, .cmp-teaser--secure picture').forEach((el) => el.remove());
+    // site-wide: internal links inherited from the source AEM site carry a `.html`
+    // extension (e.g. /us/en/adventures.html). EDS serves pages extension-less, so
+    // strip `.html` from root-relative internal links. External URLs, anchors (#…),
+    // and asset links (.jpg/.svg/.pdf/etc.) are left untouched.
+    element.querySelectorAll('a[href]').forEach((a) => {
+      const href = a.getAttribute('href');
+      if (!href) return;
+      // only root-relative internal page links ending in .html
+      if (/^\/[^?#]*\.html(?=$|[?#])/.test(href)) {
+        a.setAttribute('href', href.replace(/\.html(?=$|[?#])/, ''));
+      }
+    });
 
     // magazine-article only: the article body repeats the page title as a lower-level
     // heading (an in-article .cmp-title duplicating the H1). The source shows the title
