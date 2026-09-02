@@ -5,7 +5,15 @@
  * Transformer: wknd section breaks / section metadata.
  * Driven by payload.template.sections from page-templates.json
  * (about-us: 5 sections → 4 breaks; magazine: 7 sections → 6 breaks;
- * adventure-detail: 3 sections → 2 breaks).
+ * adventure-detail: 3 sections → 2 breaks; adventure-index: 5 sections → 4 breaks).
+ * adventure-index section selectors verified against migration-work/cleaned.html:
+ * sec1 page-title (nested main.container ... :nth-of-type(1), first section → no break),
+ * sec2 hero teaser (div.teaser.cmp-teaser--hero, line 174), sec3 "Current Adventures"
+ * heading (div.title.cmp-title--underline, line 195), sec4 adventure grid
+ * (div.tabs.panelcontainer, line 200 — survives parsing because the cards parser targets
+ * only the inner .cmp-tabs__tabpanel--active .image-list.list, not this wrapper, so the
+ * before()-inserted <hr> stays put), sec5 separator (div.separator, line 728). All
+ * style: null → 4 bare <hr>, no Section Metadata blocks.
  * Template-agnostic: reads payload.template.sections at runtime, so it adapts to
  * whichever template's section count is passed in. All magazine section selectors
  * verified against migration-work/cleaned.html (rc1 title, rc2 teaser, rc3/rc5

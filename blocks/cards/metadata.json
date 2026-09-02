@@ -15,8 +15,8 @@
     "imageCount": 1
   },
   "usage": {
-    "pagesUsing": ["index", "/us/en/about-us", "/us/en/magazine"],
-    "reuseCount": 3,
+    "pagesUsing": ["index", "/us/en/about-us", "/us/en/magazine", "/us/en/adventures"],
+    "reuseCount": 4,
     "lastUsed": "2026-09-02T00:00:00.000Z"
   }
 }

@@ -4,6 +4,82 @@
   },
   "templates": [
     {
+      "name": "adventure-index",
+      "urls": [
+        "https://wknd.site/us/en/adventures.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/adventures.html",
+      "description": "Adventures index: page title, hero teaser with intro panel, filterable adventure card grid",
+      "blocks": [
+        {
+          "name": "columns-intro",
+          "instances": [
+            "div.teaser.cmp-teaser--hero"
+          ]
+        },
+        {
+          "name": "cards",
+          "instances": [
+            ".cmp-tabs__tabpanel--active .image-list.list"
+          ],
+          "section": "articles"
+        }
+      ],
+      "urlPattern": "/us/en/adventures",
+      "sections": [
+        {
+          "id": "sec1",
+          "name": "Page Title",
+          "selector": "main.container.responsivegrid.cmp-layout-container--fixed.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(1)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main.container.responsivegrid.cmp-layout-container--fixed.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(1)"
+          ]
+        },
+        {
+          "id": "sec2",
+          "name": "Hero Teaser",
+          "selector": "div.teaser.cmp-teaser--hero.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [
+            "columns-intro"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "sec3",
+          "name": "Current Adventures Heading",
+          "selector": "div.title.cmp-title--underline.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.title.cmp-title--underline.aem-GridColumn.aem-GridColumn--default--12"
+          ]
+        },
+        {
+          "id": "sec4",
+          "name": "Adventure Grid",
+          "selector": "div.tabs.panelcontainer.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "sec5",
+          "name": "Separator",
+          "selector": "div.separator.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.separator.aem-GridColumn.aem-GridColumn--default--12"
+          ]
+        }
+      ]
+    },
+    {
       "name": "adventure-detail",
       "urls": [
         "https://wknd.site/us/en/adventures/bali-surf-camp.html",

@@ -19,6 +19,22 @@
  * (div.tabs.panelcontainer) — is not matched by any cleanup selector and is preserved.
  * The nested layout main (main.cmp-layout-container--fixed) is likewise untouched.
  * No selector changes needed for adventure-detail.
+ *
+ * adventure-index (adventures.html) adds a filterable adventure grid built as an
+ * AEM tabs component (div.tabs.panelcontainer, cleaned.html line 200). Only the
+ * ACTIVE "All" tabpanel's grid is a mapped block (cards ← ".cmp-tabs__tabpanel--active
+ * .image-list.list"); the parser replaces just that inner image-list. Left untouched,
+ * the tab-filter bar (ol.cmp-tabs__tablist "All/Climbing/Cycling/Skiing/Surfing/Travel",
+ * line 202) and the five INACTIVE tabpanels (lines 456/492/543/594/630, each a duplicate
+ * filtered .image-list.list) would serialize to markdown as stray leaked content.
+ * We remove them in afterTransform (AFTER parsers run) so:
+ *   - adventure-index: the active tabpanel (kept via :not(--active)) still wraps the
+ *     emitted cards block; only the filter bar + inactive duplicate panels are stripped.
+ *   - adventure-detail: SAFE — its tabs-detail parser replaces the entire
+ *     div.tabs.panelcontainer via element.replaceWith(block) between the hooks, so NO
+ *     .cmp-tabs__tabpanel / ol.cmp-tabs__tablist survive to afterTransform → no-op there.
+ *   - magazine / about-us: no tabs component → no-op.
+ * The active grid, hero teaser, "Current Adventures" title and separator are preserved.
  */
 const TransformHook = { beforeTransform: 'beforeTransform', afterTransform: 'afterTransform' };
 
@@ -45,6 +61,21 @@ export default function transform(hookName, element, payload) {
     WebImporter.DOMUtils.remove(element, [
       'header.cmp-experiencefragment--header',
       'footer.cmp-experiencefragment--footer',
+    ]);
+
+    // adventure-index only: strip the tabs filter bar and the inactive category
+    // tabpanels so their duplicate filtered card grids don't leak as stray content.
+    // Verified in cleaned.html: ol.cmp-tabs__tablist (line 202) holds the
+    // All/Climbing/Cycling/Skiing/Surfing/Travel labels; the five inactive
+    // .cmp-tabs__tabpanel elements (lines 456/492/543/594/630) each hold a duplicate
+    // .image-list.list. The ACTIVE panel (.cmp-tabs__tabpanel--active) is preserved —
+    // by now it wraps the cards block the parser emitted.
+    // Safe for adventure-detail: its tabs-detail parser has already replaced the whole
+    // div.tabs.panelcontainer, so no tablist/tabpanel remains here (no-op). magazine /
+    // about-us have no tabs component (no-op).
+    WebImporter.DOMUtils.remove(element, [
+      'ol.cmp-tabs__tablist',
+      '.cmp-tabs__tabpanel:not(.cmp-tabs__tabpanel--active)',
     ]);
   }
 }

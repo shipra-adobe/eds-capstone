@@ -1,0 +1,39 @@
+{
+  "variantName": "columns-intro",
+  "baseBlock": "columns",
+  "version": "1.0.0",
+  "created": "2026-09-02T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://wknd.site/us/en/adventures.html",
+    "originPage": "WKND Adventures index",
+    "blockPosition": "top"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "intro-teaser",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "image + heading + paragraph",
+    "buttonCount": 0,
+    "imageCount": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "page intro teasers with a large photo and a short heading + paragraph",
+      "image + text split panels without a CTA button",
+      "index/landing page hero-style teasers with an overlay text panel"
+    ],
+    "notSuitableFor": [
+      "featured-article teasers with eyebrow text and a CTA button (use columns)",
+      "full-bleed banner images with no text (use hero)",
+      "spec/attribute side-by-side lists (use columns-specs)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/us/en/adventures"],
+    "reuseCount": 1,
+    "lastUsed": "2026-09-02T00:00:00.000Z"
+  }
+}
