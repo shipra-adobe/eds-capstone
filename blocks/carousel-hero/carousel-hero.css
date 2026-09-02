@@ -1,0 +1,224 @@
+/* Carousel Hero — WKND homepage rotating hero.
+   Full-bleed slide with a large cover-cropped image and a white content panel
+   overlapping the lower area (heading in Asar, intro paragraph, yellow uppercase
+   CTA — same treatment as the columns "Featured Article" READ MORE button).
+   Only the active slide is visible (JS uses scrollTo + aria-hidden, horizontal
+   scroll-snap slider). Prev/next arrows + dot indicators match the source.
+   All visual values extracted from source computed styles (1440px). */
+
+/* image height driver — source ratio 640/1440 = 0.444 (=~44vw), capped at 640px */
+.carousel-hero {
+  --ch-img-height: 320px;
+  --ch-overlap: 48px;
+
+  position: relative;
+}
+
+/* full-bleed: drop the section wrapper's max-width / padding */
+main .section > .carousel-hero-wrapper {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.carousel-hero .carousel-hero-slides-container {
+  position: relative;
+}
+
+.carousel-hero .carousel-hero-slides,
+.carousel-hero .carousel-hero-slide-indicators {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* horizontal scroll-snap slider — one slide per view */
+.carousel-hero .carousel-hero-slides {
+  display: flex;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  overflow: scroll clip;
+}
+
+.carousel-hero .carousel-hero-slides::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-hero .carousel-hero-slide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- image (full-bleed, cover-cropped) --- */
+.carousel-hero .carousel-hero-slide-image {
+  width: 100%;
+}
+
+.carousel-hero .carousel-hero-slide-image picture {
+  display: block;
+  width: 100%;
+}
+
+.carousel-hero .carousel-hero-slide-image img {
+  display: block;
+  width: 100%;
+  height: var(--ch-img-height);
+  object-fit: cover;
+}
+
+/* --- white content panel, overlapping the lower area --- */
+.carousel-hero .carousel-hero-slide-content {
+  position: relative;
+  z-index: 1;
+  width: min(1136px, 100% - 32px);
+  margin: calc(var(--ch-overlap) * -1) auto 0;
+  padding: 24px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  text-align: left;
+}
+
+.carousel-hero .carousel-hero-slide-content h2 {
+  margin: 0;
+  font-family: var(--heading-font-family);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-color);
+}
+
+/* WKND section headings carry a yellow underline; the hero panel heading does not */
+.carousel-hero .carousel-hero-slide-content h2::after {
+  content: none;
+}
+
+.carousel-hero .carousel-hero-slide-content p {
+  margin: 0;
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--text-color);
+}
+
+/* CTA paragraph gap */
+.carousel-hero .carousel-hero-slide-content p:last-child {
+  margin-top: 18px;
+}
+
+/* yellow uppercase CTA — reuse the columns "READ MORE" button treatment.
+   `main ... a:any-link` matches the specificity of the global button reset in
+   styles.css and wins on cascade order (block CSS loads after styles.css). */
+main .carousel-hero .carousel-hero-slide-content a:any-link {
+  display: inline-block;
+  margin: 0;
+  padding: 14px 35px;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--accent-color);
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--text-color);
+}
+
+main .carousel-hero .carousel-hero-slide-content a:hover,
+main .carousel-hero .carousel-hero-slide-content a:focus-visible {
+  background-color: var(--link-hover-color);
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+/* --- dot indicators (centered, below the slide) --- */
+.carousel-hero .carousel-hero-slide-indicators {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 14px;
+  margin-top: 9px;
+  padding: 0;
+  line-height: 0;
+}
+
+.carousel-hero .carousel-hero-slide-indicator button {
+  width: 10px;
+  height: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgb(0 0 0 / 25%);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.carousel-hero .carousel-hero-slide-indicator button:disabled,
+.carousel-hero .carousel-hero-slide-indicator button:hover,
+.carousel-hero .carousel-hero-slide-indicator button:focus-visible {
+  background-color: rgb(0 0 0 / 80%);
+}
+
+/* --- prev / next arrows (simple chevrons, lower-right) --- */
+.carousel-hero .carousel-hero-navigation-buttons {
+  position: absolute;
+  inset: auto 24px 4px auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  z-index: 2;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.carousel-hero .carousel-hero-navigation-buttons button {
+  position: relative;
+  width: 26px;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.carousel-hero .carousel-hero-navigation-buttons button::after {
+  display: block;
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  border: 2px solid #000;
+  border-bottom: 0;
+  border-left: 0;
+  transform: translate(-50%, -50%) rotate(-135deg);
+}
+
+.carousel-hero .carousel-hero-navigation-buttons button.slide-next::after {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+@media (width >= 900px) {
+  .carousel-hero {
+    --ch-img-height: min(44vw, 640px);
+    --ch-overlap: 180px;
+  }
+
+  .carousel-hero .carousel-hero-slide-content {
+    padding: 28px 28px 32px;
+  }
+
+  .carousel-hero .carousel-hero-slide-content h2 {
+    font-size: 36px;
+    line-height: 54px;
+  }
+}

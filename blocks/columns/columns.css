@@ -120,3 +120,93 @@
     object-fit: cover;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Byline variant — WKND magazine article author card.
+   Small circular portrait beside the author name (serif h2) and occupation
+   (small uppercase, grey). Values extracted from source .cmp-byline computed
+   styles. Scoped to .columns.columns-byline so the Featured Article teaser
+   above is untouched. Base rules already set flex; here we override for a
+   compact horizontal card on all viewports.
+--------------------------------------------------------------------------- */
+
+/* stylelint-disable-next-line no-descending-specificity */
+.columns.columns-byline > div {
+  flex-direction: row;
+  align-items: center;
+  gap: 25px;
+}
+
+/* circular portrait, fixed 60x60 (does not stretch) */
+.columns.columns-byline > div > .columns-img-col {
+  flex: 0 0 60px;
+  width: 60px;
+  order: 0;
+  padding: 0;
+}
+
+.columns.columns-byline > div > .columns-img-col picture,
+.columns.columns-byline > div > .columns-img-col img {
+  display: block;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  object-fit: cover;
+}
+
+/* text cell: name + occupation — reset the grey teaser panel styling */
+.columns.columns-byline > div > div:not(.columns-img-col) {
+  order: 1;
+  flex: 0 1 auto;
+  padding: 0;
+  background-color: transparent;
+}
+
+/* author name — serif, no yellow underline accent */
+.columns.columns-byline h2 {
+  margin: 0 0 4px;
+  font-family: var(--heading-font-family);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 36px;
+  color: var(--text-color);
+}
+
+.columns.columns-byline h2::after {
+  content: none;
+}
+
+/* occupation — small, uppercase, grey */
+.columns.columns-byline > div > div:not(.columns-img-col) > p {
+  margin: 0;
+  font-family: var(--body-font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 30px;
+  color: #696969;
+  text-transform: uppercase;
+}
+
+/* keep the compact horizontal card at desktop too (base rules flip to row
+   layout with flex ratios for the featured teaser at >= 900px) */
+@media (width >= 900px) {
+  .columns.columns-byline > div {
+    align-items: center;
+    gap: 25px;
+  }
+
+  .columns.columns-byline > div > .columns-img-col {
+    flex: 0 0 60px;
+  }
+
+  .columns.columns-byline > div > div:not(.columns-img-col) {
+    flex: 0 1 auto;
+    padding: 0;
+  }
+
+  .columns.columns-byline > div > .columns-img-col img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+  }
+}

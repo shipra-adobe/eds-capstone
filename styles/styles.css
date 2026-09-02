@@ -408,3 +408,80 @@ main .section.highlight {
     grid-row: 2 / 4;
   }
 }
+
+/* magazine-article two-column layout (WKND magazine story pages).
+   Source layout: full-width lead image on top, then the article body (wide left
+   column) beside a "Share this story / Up next" sidebar (narrow right rail).
+   The page has three sections: [0] lead image, [1] breadcrumb+article+byline
+   (.columns-container), [2] sidebar. On desktop we turn `main` into a 2-col grid
+   so the lead image spans both columns and the article/sidebar sit side by side.
+   Measured from source at 1440px: content ~1164px, article ~776 / sidebar ~291,
+   gap ~97px → ~72%/28% split. */
+@media (width >= 900px) {
+  body.magazine-article main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 291px;
+    column-gap: 97px;
+    align-items: start;
+    max-width: 1164px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* lead image (first section) spans the full width above the two columns */
+  body.magazine-article main > .section:first-of-type {
+    grid-column: 1 / -1;
+  }
+
+  /* article body sits in the left column, sidebar in the right, on the same row */
+  body.magazine-article main > .section.columns-container {
+    grid-column: 1;
+  }
+
+  body.magazine-article main > .section:last-of-type {
+    grid-column: 2;
+  }
+
+  /* the sections already sit inside main's max-width/padding, so their inner
+     wrappers should fill their grid column instead of re-centering at 1200px */
+  body.magazine-article main > .section > div {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* faqs two-column layout (WKND FAQs page).
+   Source layout: FAQ content (heading, banner, intro, accordion) in a wide left
+   column beside a "Need more help?" contact sidebar (narrow right rail), both
+   top-aligned. Two sections: [0] FAQ content (.accordion-faq-container), [1] sidebar.
+   Measured from source at 1440px: content ~1164px, FAQ col ~748 / sidebar ~291,
+   gap ~111px. */
+@media (width >= 900px) {
+  body.faqs main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 291px;
+    column-gap: 111px;
+    align-items: start;
+    max-width: 1164px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  body.faqs main > .section.accordion-faq-container {
+    grid-column: 1;
+    margin: 0;
+  }
+
+  body.faqs main > .section:last-of-type {
+    grid-column: 2;
+    margin: 0;
+  }
+
+  /* wrappers fill their grid column instead of re-centering at 1200px */
+  body.faqs main > .section > div {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+}

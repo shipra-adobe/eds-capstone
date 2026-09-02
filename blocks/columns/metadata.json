@@ -15,8 +15,13 @@
     "imageCount": 1
   },
   "usage": {
-    "pagesUsing": ["index", "/us/en/magazine"],
-    "reuseCount": 2,
-    "lastUsed": "2026-09-02T00:00:00.000Z"
+    "pagesUsing": [
+      "index",
+      "/us/en/magazine",
+      "/us/en",
+      "/us/en/magazine/arctic-surfing"
+    ],
+    "reuseCount": 4,
+    "lastUsed": "2026-09-02T09:35:00.000Z"
   }
 }

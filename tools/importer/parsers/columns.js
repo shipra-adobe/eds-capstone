@@ -3,11 +3,26 @@
 
 /**
  * Parser for the `columns` block. Base: columns.
- * Source: https://wknd.site/us/en/magazine.html
- * Selector: div.teaser.cmp-teaser--featured
+ * Sources:
+ *   - https://wknd.site/us/en/magazine.html   (selector: div.teaser.cmp-teaser--featured)
+ *   - https://wknd.site/us/en.html            (selector: div.teaser.cmp-teaser--featured)
+ *   - https://wknd.site/us/en/magazine/arctic-surfing.html (selector: .cmp-byline)
  * Generated: 2026-09-02
  *
- * The magazine "Featured Article" is a Core Components teaser rendered as:
+ * This parser handles TWO distinct `columns` instances that share the block name:
+ *
+ * 1. Author byline card (magazine-article) — selector `.cmp-byline`:
+ *      div.cmp-byline
+ *        ├ div.cmp-byline__image > div.cmp-image > img   (small author portrait)
+ *        ├ h2.cmp-byline__name                            (author name)
+ *        └ p.cmp-byline__occupations                      (occupation)
+ *    A sibling social-share building block
+ *    (div.buildingblock.cmp-buildingblock--btn-list with Facebook/Twitter/
+ *    Instagram links) belongs with this byline and is folded into the text cell.
+ *    Target (EDS columns): a single 2-cell row → [portrait image, text cell].
+ *
+ * 2. Featured Article teaser (homepage / magazine index) — selector
+ *    `div.teaser.cmp-teaser--featured`, rendered as:
  *   div.teaser.cmp-teaser--featured
  *     └ div.cmp-teaser
  *         ├ div.cmp-teaser__content
@@ -23,6 +38,72 @@
  *   cell 1 = image, cell 2 = body (eyebrow, title heading, description, CTA link).
  */
 export default function parse(element, { document }) {
+  // =========================================================================
+  // Instance 1: Author byline card (`.cmp-byline`)
+  // =========================================================================
+  if (element.matches('.cmp-byline') || element.querySelector('.cmp-byline__name')) {
+    const byline = element.matches('.cmp-byline')
+      ? element
+      : element.querySelector('.cmp-byline');
+
+    // Column 1: small author portrait.
+    const portrait = byline.querySelector('.cmp-byline__image img, .cmp-image img, img');
+
+    // Column 2: name (heading), occupation, and social-share links.
+    const textCell = [];
+
+    const name = byline.querySelector('.cmp-byline__name, h1, h2, h3');
+    if (name && name.textContent.trim()) {
+      textCell.push(name);
+    }
+
+    const occupation = byline.querySelector('.cmp-byline__occupations, p');
+    if (occupation && occupation.textContent.trim()) {
+      textCell.push(occupation);
+    }
+
+    // Social-share building block. It lives OUTSIDE `.cmp-byline` as a sibling
+    // (div.buildingblock.cmp-buildingblock--btn-list). Look inside the byline
+    // first, then fall back to the nearest sibling share block within scope.
+    let shareScope = byline.querySelector('.cmp-buildingblock--btn-list, [class*="btn-list"], [class*="sharing"]');
+    if (!shareScope) {
+      // Search siblings of the byline and of the passed-in element.
+      const searchRoots = [byline.parentElement, element.parentElement].filter(Boolean);
+      for (const root of searchRoots) {
+        shareScope = root.querySelector('.cmp-buildingblock--btn-list, [class*="btn-list"]');
+        if (shareScope) break;
+      }
+    }
+    if (shareScope) {
+      const shareLinks = Array.from(shareScope.querySelectorAll('a[href]'));
+      shareLinks.forEach((a) => {
+        const label = a.textContent.trim();
+        const href = a.getAttribute('href');
+        if (!label || !href) return;
+        const link = document.createElement('a');
+        link.setAttribute('href', href);
+        link.textContent = label;
+        const p = document.createElement('p');
+        p.appendChild(link);
+        textCell.push(p);
+      });
+    }
+
+    // Empty-block guard.
+    if (!portrait && !textCell.length) {
+      element.replaceWith(...element.childNodes);
+      return;
+    }
+
+    const bylineCells = [[portrait || '', textCell.length ? textCell : '']];
+    const bylineBlock = WebImporter.Blocks.createBlock(document, { name: 'columns', cells: bylineCells });
+    element.replaceWith(bylineBlock);
+    return;
+  }
+
+  // =========================================================================
+  // Instance 2: Featured Article teaser (`div.teaser.cmp-teaser--featured`)
+  // =========================================================================
   // --- Column 1: featured image -------------------------------------------
   const image = element.querySelector('.cmp-teaser__image img, .cmp-image img, img');
 

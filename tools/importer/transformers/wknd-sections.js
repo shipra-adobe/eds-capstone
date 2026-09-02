@@ -4,8 +4,19 @@
 /**
  * Transformer: wknd section breaks / section metadata.
  * Driven by payload.template.sections from page-templates.json
- * (about-us: 5 sections → 4 breaks; magazine: 7 sections → 6 breaks;
- * adventure-detail: 3 sections → 2 breaks; adventure-index: 5 sections → 4 breaks).
+ * (homepage: 5 sections → 4 breaks; about-us: 5 sections → 4 breaks;
+ * magazine: 7 sections → 6 breaks; adventure-detail: 3 sections → 2 breaks;
+ * adventure-index: 5 sections → 4 breaks).
+ * homepage section selectors verified against migration-work/cleaned.html:
+ * sec1 hero carousel (div.carousel.cmp-carousel--hero, line 165 — first section → no
+ * break; its carousel-hero parser replaces the whole div between hooks but sec1 gets no
+ * <hr> anyway), sec2 featured teaser (div.teaser.cmp-teaser--featured, line 256),
+ * sec3 recent-articles grid (nested main.container.cmp-layout-container--fixed
+ * :nth-of-type(1), line 253 — the cards parser targets the inner div.image-list.list,
+ * line 281, not this wrapper, so the before()-inserted <hr> survives), sec4 next-adventures
+ * teaser (div.teaser.cmp-teaser--hero.cmp-teaser--imagebottom, line 364), sec5 where-to-go
+ * grid (nested main.container.cmp-layout-container--fixed :nth-of-type(2), line 383, inner
+ * image-list at line 391). All style: null → 4 bare <hr>, no Section Metadata blocks.
  * adventure-index section selectors verified against migration-work/cleaned.html:
  * sec1 page-title (nested main.container ... :nth-of-type(1), first section → no break),
  * sec2 hero teaser (div.teaser.cmp-teaser--hero, line 174), sec3 "Current Adventures"

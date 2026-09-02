@@ -4,6 +4,180 @@
   },
   "templates": [
     {
+      "name": "faqs",
+      "urls": [
+        "https://wknd.site/us/en/faqs.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/faqs.html",
+      "description": "WKND FAQs page: H1 heading, banner image, intro paragraph, a 7-item Q&A accordion, and a 'Need more help?' contact sidebar.",
+      "blocks": [
+        {
+          "name": "accordion-faq",
+          "instances": [
+            ".cmp-accordion"
+          ]
+        }
+      ],
+      "urlPattern": "/us/en/*",
+      "sections": [
+        {
+          "id": "rc1",
+          "name": "FAQ Main Content",
+          "selector": "#container-0e3ddb0dd6",
+          "style": null,
+          "blocks": [
+            "accordion-faq"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc2",
+          "name": "Need More Help Sidebar",
+          "selector": "div.aem-GridColumn--offset--default--1",
+          "style": null,
+          "blocks": [],
+          "defaultContent": []
+        }
+      ]
+    },
+    {
+      "name": "magazine-article",
+      "urls": [
+        "https://wknd.site/us/en/magazine/arctic-surfing.html",
+        "https://wknd.site/us/en/magazine/guide-la-skateparks.html",
+        "https://wknd.site/us/en/magazine/san-diego-surf.html",
+        "https://wknd.site/us/en/magazine/ski-touring.html",
+        "https://wknd.site/us/en/magazine/western-australia.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/magazine/arctic-surfing.html",
+      "description": "WKND magazine article-detail page: lead image, breadcrumb, long-form editorial body (headings, prose, pull-quote, inline images), author byline (columns), and related-articles sidebar.",
+      "blocks": [
+        {
+          "name": "columns",
+          "instances": [
+            ".cmp-byline"
+          ]
+        }
+      ],
+      "urlPattern": "/us/en/magazine/*",
+      "sections": [
+        {
+          "id": "rc1",
+          "name": "Lead Image",
+          "selector": "div.image.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [],
+          "defaultContent": []
+        },
+        {
+          "id": "rc2",
+          "name": "Breadcrumb + Article",
+          "selector": "div.breadcrumb.aem-GridColumn",
+          "style": null,
+          "blocks": [
+            "columns"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc4",
+          "name": "Story Sidebar",
+          "selector": "aside.cmp-layoutcontainer--sidebar",
+          "style": null,
+          "blocks": [],
+          "defaultContent": []
+        }
+      ]
+    },
+    {
+      "name": "homepage",
+      "urls": [
+        "https://wknd.site/us/en.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en.html",
+      "description": "Homepage: hero carousel, featured article, recent articles grid, next adventures teaser, adventures grid",
+      "blocks": [
+        {
+          "name": "carousel-hero",
+          "instances": [
+            "div.carousel.cmp-carousel--hero"
+          ]
+        },
+        {
+          "name": "columns",
+          "instances": [
+            "div.teaser.cmp-teaser--featured"
+          ]
+        },
+        {
+          "name": "columns-intro",
+          "instances": [
+            "div.teaser.cmp-teaser--hero.cmp-teaser--imagebottom"
+          ]
+        },
+        {
+          "name": "cards",
+          "instances": [
+            "div.image-list.list"
+          ],
+          "section": "articles"
+        }
+      ],
+      "urlPattern": "/us/*",
+      "sections": [
+        {
+          "id": "sec1",
+          "name": "Hero Carousel",
+          "selector": "div.carousel.panelcontainer.cmp-carousel--hero.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [
+            "carousel-hero"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "sec2",
+          "name": "Featured Article",
+          "selector": "div.teaser.cmp-teaser--featured.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [
+            "columns"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "sec3",
+          "name": "Recent Articles",
+          "selector": "main.container.responsivegrid.cmp-layout-container--fixed.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(1)",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "sec4",
+          "name": "Next Adventures",
+          "selector": "div.teaser.cmp-teaser--hero.cmp-teaser--imagebottom.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [
+            "columns-intro"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "sec5",
+          "name": "Where To Go",
+          "selector": "main.container.responsivegrid.cmp-layout-container--fixed.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2)",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": []
+        }
+      ]
+    },
+    {
       "name": "adventure-index",
       "urls": [
         "https://wknd.site/us/en/adventures.html"
@@ -25,7 +199,7 @@
           "section": "articles"
         }
       ],
-      "urlPattern": "/us/en/adventures",
+      "urlPattern": "/us/en/*",
       "sections": [
         {
           "id": "sec1",

@@ -35,6 +35,78 @@
  *     .cmp-tabs__tabpanel / ol.cmp-tabs__tablist survive to afterTransform → no-op there.
  *   - magazine / about-us: no tabs component → no-op.
  * The active grid, hero teaser, "Current Adventures" title and separator are preserved.
+ *
+ * homepage (us/en.html) re-verified against migration-work/cleaned.html — NO selector
+ * changes needed:
+ *   - Site chrome is identical: header.cmp-experiencefragment--header (line 5),
+ *     footer.cmp-experiencefragment--footer (line 471), demdex ID-sync iframe (line 566,
+ *     the only iframe → bare 'iframe' safe), #toggleNav (568), #mobileNav (574).
+ *   - The hero is a CAROUSEL (div.carousel.cmp-carousel--hero, line 165) built from
+ *     cmp-carousel__item slides (lines 168/189/210), cmp-carousel__actions prev/next
+ *     buttons (line 233) and ol.cmp-carousel__indicators (line 245). These are a DIFFERENT
+ *     component from cmp-tabs: the inactive-tabpanel/tablist rule below targets
+ *     ol.cmp-tabs__tablist + .cmp-tabs__tabpanel ONLY, and the homepage has ZERO cmp-tabs
+ *     elements, so that rule is a no-op here and CANNOT touch carousel slides. The whole
+ *     carousel is the carousel-hero block instance, replaced by its parser between hooks,
+ *     so the carousel prev/next actions + indicator tablist never survive to afterTransform
+ *     (no chrome leak) — no carousel-specific cleanup rule is added.
+ *   - Featured teaser (div.teaser.cmp-teaser--featured, line 256), card grids
+ *     (div.image-list.list, lines 281/391), section headings (div.title.cmp-title--underline,
+ *     lines 276/356), ALL ARTICLES/ALL TRIPS buttons and separators are authorable and are
+ *     matched by NO cleanup selector → all preserved.
+ *
+ * magazine-article (magazine/arctic-surfing.html) re-verified against
+ * migration-work/cleaned.html — site chrome is IDENTICAL to the other templates
+ * (header.cmp-experiencefragment--header line 5, footer.cmp-experiencefragment--footer
+ * line 378, the sole demdex ID-sync iframe line 473 → bare 'iframe' safe, #toggleNav
+ * line 475, #mobileNav line 481), so no chrome selector changes are needed. The
+ * article-detail authorable content is all inside <main> and matched by NO cleanup
+ * selector, so it is preserved:
+ *   - Lead image (div.image, line 165) and BREADCRUMB (div.breadcrumb / nav.cmp-breadcrumb,
+ *     line 170) are KEPT as default content — consistent with the WKND convention already
+ *     used for adventure-detail (rc1 breadcrumb kept as default content), and with this
+ *     page's page-structure.json (rc2) / authoring-analysis.json, which both classify the
+ *     breadcrumb as default-content. The cleanup does NOT remove breadcrumb.
+ *   - Long-form editorial body (h1 title, h4 author sub-heading, paragraphs, the pull-quote
+ *     <blockquote> line 212, inline images, and the three underlined h2 subsections) is all
+ *     default content → untouched.
+ *   - Author byline card (div.cmp-byline, line 284) and its sibling social-share building
+ *     block (div.buildingblock.cmp-buildingblock--btn-list, line 294, Facebook/Twitter/
+ *     Instagram) become the 'columns' block (mapped at .cmp-byline) — the social links
+ *     belong WITH that block and are consumed by the columns parser. The cleanup therefore
+ *     must NOT use a broad '.buildingblock' / '.cmp-buildingblock--btn-list' selector
+ *     (that would also strip the identical footer building block AND, worse, the byline's
+ *     own social links); the footer building block is already removed with the whole footer.
+ *   - Story sidebar (aside.cmp-layoutcontainer--sidebar, line 330) is KEPT as default
+ *     content: the "SHARE THIS STORY" heading (div.title.cmp-title--black, line 333) and
+ *     the "Up next" related-articles list (div.list.cmp-list--upnext, line 344) are
+ *     authorable. The ONE new removal below strips the sidebar's empty social-share
+ *     widget (div.sharing, line 338) — see afterTransform.
+ *
+ * faqs (faqs.html) re-verified against migration-work/cleaned.html — site chrome is
+ * IDENTICAL to every other WKND template (header.cmp-experiencefragment--header line 5,
+ * footer.cmp-experiencefragment--footer line 357, the sole demdex ID-sync iframe line 452
+ * → bare 'iframe' safe, #toggleNav line 454, #mobileNav line 460), so NO chrome selector
+ * changes are needed. All authorable FAQ content lives in <main> and is matched by NO
+ * cleanup selector, so it is fully preserved:
+ *   - H1 "FAQs" (div.title.cmp-title--underline > h1, line 170), banner image
+ *     (#image-7642821cc3 img, line 175) and intro paragraph (#text-a8814241aa, line 180)
+ *     are default content → untouched.
+ *   - The 7-item Q&A accordion (div.accordion.panelcontainer > div.cmp-accordion, line 185)
+ *     becomes the accordion-faq block (mapped at .cmp-accordion). CRITICALLY, no cleanup
+ *     selector reaches inside it: the tabs rule targets ONLY ol.cmp-tabs__tablist /
+ *     .cmp-tabs__tabpanel (this page has ZERO cmp-tabs elements → no-op, cannot touch the
+ *     cmp-accordion__item / __panel / __button internals the accordion parser needs), and
+ *     div.sharing does not exist here (no-op). So the accordion is delivered intact.
+ *   - "Need more help?" sidebar (#container-ef2c6c2ddf, line 333) is KEPT as default
+ *     content: its <hr> separator (div.separator.cmp-separator--hidden > hr, lines 334-337 —
+ *     an authored thematic break per page-structure.json / authoring-analysis.json, NOT
+ *     chrome; the cleanup never removes bare <hr> or separators), the H3 "Need more help?"
+ *     (#title-4c1f7ce4c3, line 341) and the contact paragraph with phone/email/tagline
+ *     (#text-c58c5ff307, line 344) are all authorable.
+ * There is NO non-content chrome inside <main> on this page (unlike article-detail's empty
+ * div.sharing widget), so NO FAQ-specific removal is added — a broad selector risked
+ * stripping accordion internals and is deliberately avoided.
  */
 const TransformHook = { beforeTransform: 'beforeTransform', afterTransform: 'afterTransform' };
 
@@ -76,6 +148,18 @@ export default function transform(hookName, element, payload) {
     WebImporter.DOMUtils.remove(element, [
       'ol.cmp-tabs__tablist',
       '.cmp-tabs__tabpanel:not(.cmp-tabs__tabpanel--active)',
+    ]);
+
+    // magazine-article only: strip the sidebar's empty social-share widget.
+    // Verified in cleaned.html: div.sharing (line 338) holds an empty .fb-share-button
+    // and an empty Pinterest anchor (<a href="pinterest...">, no text) — these are
+    // share-intent site behaviors, not authored content, and would otherwise serialize
+    // as a stray empty link. The sibling "SHARE THIS STORY" heading (div.title.cmp-title--black,
+    // line 333) and the "Up next" list (div.list.cmp-list--upnext, line 344) are authorable
+    // and are NOT matched here, so they survive. Narrow, article-specific class (div.sharing);
+    // no other template has this element (no-op elsewhere).
+    WebImporter.DOMUtils.remove(element, [
+      'div.sharing',
     ]);
   }
 }

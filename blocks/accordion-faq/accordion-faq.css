@@ -1,0 +1,104 @@
+/*
+ * Accordion Block (accordion-faq variant)
+ * Styling matched to the WKND Core Components FAQ accordion (.cmp-accordion).
+ * Values extracted from source computed styles at https://wknd.site/us/en/faqs.html
+ *
+ * Source structure: <button> question row + <div> answer panel, with a
+ * light-gray divider under each question and a +/- toggle icon on the right.
+ * EDS structure: <details class="accordion-faq-item"> with a
+ * <summary class="accordion-faq-item-label"> (question) and a
+ * <div class="accordion-faq-item-body"> (answer).
+ */
+
+/* Item wrapper: no border/box, items stack tightly (divider lives on the row). */
+.accordion-faq details {
+  border: none;
+  margin: 0;
+}
+
+.accordion-faq details + details {
+  margin-top: 0;
+}
+
+/* Question row — matches .cmp-accordion__button + .cmp-accordion__title */
+.accordion-faq details summary {
+  position: relative;
+  padding: 13px 40px 13px 21px;
+  border-bottom: 2px solid #ebebeb;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: uppercase;
+  color: #000;
+  cursor: pointer;
+  list-style: none;
+}
+
+.accordion-faq details summary::-webkit-details-marker {
+  display: none;
+}
+
+/* EDS wraps the question text in a <p>; drop its inherited margins so the
+   label stays vertically centered against the absolutely-positioned icon. */
+.accordion-faq details summary p {
+  margin: 0;
+}
+
+/* Source removes the divider on the open item (button--expanded { border: none }) */
+.accordion-faq details[open] summary {
+  border-bottom: none;
+}
+
+/* Toggle icon: recreate the wknd-icon-font +/- glyph with CSS.
+   Horizontal bar (always visible) = the minus; combined with the
+   vertical bar below it forms the plus when collapsed. Black, right-aligned. */
+.accordion-faq details summary::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  width: 14px;
+  height: 2px;
+  background-color: #000;
+  transform: translateY(-50%);
+}
+
+.accordion-faq details summary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 22px;
+  width: 2px;
+  height: 14px;
+  background-color: #000;
+  transform: translateY(-50%);
+  transition: opacity 0.2s;
+}
+
+/* Open state: hide the vertical bar so the icon becomes a minus. */
+.accordion-faq details[open] summary::before {
+  opacity: 0;
+}
+
+/* Answer panel — matches .cmp-accordion__panel */
+.accordion-faq details .accordion-faq-item-body {
+  padding: 7px 16px 0 21px;
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-color);
+  animation: accordion-faq-fade-in 0.5s both;
+}
+
+.accordion-faq details .accordion-faq-item-body p {
+  margin: 0 0 13.5px;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+@keyframes accordion-faq-fade-in {
+  from { opacity: 0; }
+
+  to { opacity: 1; }
+}

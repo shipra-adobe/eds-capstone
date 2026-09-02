@@ -32,8 +32,11 @@
     ]
   },
   "usage": {
-    "pagesUsing": ["/us/en/adventures"],
-    "reuseCount": 1,
-    "lastUsed": "2026-09-02T00:00:00.000Z"
+    "pagesUsing": [
+      "/us/en/adventures",
+      "/us/en"
+    ],
+    "reuseCount": 2,
+    "lastUsed": "2026-09-02T06:12:00.000Z"
   }
 }
