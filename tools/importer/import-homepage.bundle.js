@@ -177,8 +177,10 @@ var CustomImportScript = (() => {
       const link = document2.createElement("a");
       link.setAttribute("href", cta.getAttribute("href"));
       link.textContent = cta.textContent.trim();
+      const strong = document2.createElement("strong");
+      strong.appendChild(link);
       const p = document2.createElement("p");
-      p.appendChild(link);
+      p.appendChild(strong);
       bodyContent.push(p);
     }
     if (!image && !bodyContent.length) {
@@ -201,6 +203,17 @@ var CustomImportScript = (() => {
     const description = element.querySelector('.cmp-teaser__description, [class*="teaser__description"]');
     if (description && description.textContent.trim()) {
       bodyContent.push(description);
+    }
+    const cta = element.querySelector('.cmp-teaser__action-link, .cmp-teaser__action-container a, a[class*="action"]');
+    if (cta && cta.getAttribute("href") && cta.textContent.trim()) {
+      const link = document2.createElement("a");
+      link.setAttribute("href", cta.getAttribute("href"));
+      link.textContent = cta.textContent.trim();
+      const strong = document2.createElement("strong");
+      strong.appendChild(link);
+      const p = document2.createElement("p");
+      p.appendChild(strong);
+      bodyContent.push(p);
     }
     if (!image && !bodyContent.length) {
       element.replaceWith(...element.childNodes);
@@ -333,6 +346,20 @@ var CustomImportScript = (() => {
       WebImporter.DOMUtils.remove(element, [
         "div.sharing"
       ]);
+      element.querySelectorAll("div.cmp-button--primary a.cmp-button[href]").forEach((a) => {
+        const href = a.getAttribute("href");
+        const label = (a.querySelector(".cmp-button__text") || a).textContent.trim();
+        if (!href || !label) return;
+        const link = element.ownerDocument.createElement("a");
+        link.setAttribute("href", href);
+        link.textContent = label;
+        const strong = element.ownerDocument.createElement("strong");
+        strong.appendChild(link);
+        const p = element.ownerDocument.createElement("p");
+        p.appendChild(strong);
+        const wrapper = a.closest("div.cmp-button--primary") || a;
+        wrapper.replaceWith(p);
+      });
       element.querySelectorAll("a[href]").forEach((a) => {
         const href = a.getAttribute("href");
         if (!href) return;

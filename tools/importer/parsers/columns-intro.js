@@ -48,6 +48,21 @@ export default function parse(element, { document }) {
     bodyContent.push(description);
   }
 
+  // CTA button (optional) — e.g. the homepage "Next Adventures" teaser has a
+  // "See Trip" action link. The adventures-index hero has none. Emit it wrapped
+  // in <strong> so the site's decorateButtons() promotes it to a WKND button.
+  const cta = element.querySelector('.cmp-teaser__action-link, .cmp-teaser__action-container a, a[class*="action"]');
+  if (cta && cta.getAttribute('href') && cta.textContent.trim()) {
+    const link = document.createElement('a');
+    link.setAttribute('href', cta.getAttribute('href'));
+    link.textContent = cta.textContent.trim();
+    const strong = document.createElement('strong');
+    strong.appendChild(link);
+    const p = document.createElement('p');
+    p.appendChild(strong);
+    bodyContent.push(p);
+  }
+
   // Empty-block guard: nothing worth emitting → unwrap instead of emitting an empty block.
   if (!image && !bodyContent.length) {
     element.replaceWith(...element.childNodes);

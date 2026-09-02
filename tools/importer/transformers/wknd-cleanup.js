@@ -162,6 +162,30 @@ export default function transform(hookName, element, payload) {
       'div.sharing',
     ]);
 
+    // site-wide: standalone WKND CTA buttons (Core Components Button, rendered as
+    // `a.cmp-button` inside `div.button.cmp-button--primary`) are authored calls to
+    // action — e.g. "All Trips", "All Articles". Emit each as a bold link in its own
+    // paragraph so the site's decorateButtons() promotes it to a WKND button. The
+    // inner `.cmp-button__text` span carries the label. Scoped to `.cmp-button--primary`
+    // so header/footer social + sign-in buttons (different classes, and removed above
+    // as chrome) are never matched.
+    element.querySelectorAll('div.cmp-button--primary a.cmp-button[href]').forEach((a) => {
+      const href = a.getAttribute('href');
+      const label = (a.querySelector('.cmp-button__text') || a).textContent.trim();
+      if (!href || !label) return;
+      const link = element.ownerDocument.createElement('a');
+      link.setAttribute('href', href);
+      link.textContent = label;
+      const strong = element.ownerDocument.createElement('strong');
+      strong.appendChild(link);
+      const p = element.ownerDocument.createElement('p');
+      p.appendChild(strong);
+      // Replace the button's grid wrapper (div.button.cmp-button--primary) so no
+      // empty Core Components scaffolding remains.
+      const wrapper = a.closest('div.cmp-button--primary') || a;
+      wrapper.replaceWith(p);
+    });
+
     // site-wide: internal links inherited from the source AEM site carry a `.html`
     // extension (e.g. /us/en/adventures.html). EDS serves pages extension-less, so
     // strip `.html` from root-relative internal links. External URLs, anchors (#…),

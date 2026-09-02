@@ -243,15 +243,14 @@ button.button:disabled {
   pointer-events: none;
 }
 
-a.button.primary,
+/* Generic EDS pill variants — retained only for real <button> form controls.
+   WKND link CTAs (a.button) are restyled below to the yellow WKND button. */
 button.button.primary {
   border-color: var(--text-color);
   background-color: var(--text-color);
   color: var(--background-color);
 }
 
-a.button.primary:hover,
-a.button.primary:focus-visible,
 button.button.primary:hover,
 button.button.primary:focus-visible {
   border-color: var(--dark-color);
@@ -259,9 +258,6 @@ button.button.primary:focus-visible {
   color: var(--light-color);
 }
 
-a.button.primary[aria-disabled="true"],
-a.button.primary[aria-disabled="true"]:hover,
-a.button.primary[aria-disabled="true"]:focus-visible,
 button.button.primary:disabled,
 button.button.primary:disabled:hover,
 button.button.primary:disabled:focus-visible {
@@ -270,15 +266,12 @@ button.button.primary:disabled:focus-visible {
   color: var(--dark-color);
 }
 
-a.button.secondary,
 button.button.secondary {
   border-color: var(--text-color);
   background-color: transparent;
   color: var(--text-color);
 }
 
-a.button.secondary:hover,
-a.button.secondary:focus-visible,
 button.button.secondary:hover,
 button.button.secondary:focus-visible {
   border-color: var(--dark-color);
@@ -286,9 +279,6 @@ button.button.secondary:focus-visible {
   color: var(--dark-color);
 }
 
-a.button.secondary[aria-disabled="true"],
-a.button.secondary[aria-disabled="true"]:hover,
-a.button.secondary[aria-disabled="true"]:focus-visible,
 button.button.secondary:disabled,
 button.button.secondary:disabled:hover,
 button.button.secondary:disabled:focus-visible {
@@ -297,49 +287,38 @@ button.button.secondary:disabled:focus-visible {
   color: var(--dark-color);
 }
 
-/* high-impact call-to-action */
-a.button.accent,
-button.button.accent {
-  border-color: var(--link-color);
-  background-color: var(--link-color);
-  color: var(--background-color);
-}
+/* WKND button — the source renders CTAs (See Trip, All Trips, Read More, View
+   Trips, Full Article) as solid yellow rectangles: #ffea00 bg, #202020 text,
+   14px/600 uppercase, 14px 35px padding, square corners, no border. Authored as
+   a bold link, decorateButtons() promotes it to a.button.<variant>. These rules
+   cover every variant class it may add so the background always wins. */
+main .button-wrapper { margin: 24px 0; }
 
-a.button.accent:hover,
-a.button.accent:focus-visible,
-button.button.accent:hover,
-button.button.accent:focus-visible {
-  border-color: var(--link-hover-color);
-  background-color: var(--link-hover-color);
-}
-
-a.button.accent[aria-disabled="true"],
-a.button.accent[aria-disabled="true"]:hover,
-a.button.accent[aria-disabled="true"]:focus-visible,
-button.button.accent:disabled,
-button.button.accent:disabled:hover,
-button.button.accent:disabled:focus-visible {
-  background-color: var(--light-color);
-  border-color: var(--light-color);
-  color: var(--dark-color);
-}
-
-/* EDS button reset — WKND renders inline text links, not pill buttons.
-   Placed after the .button rules above so it overrides them without a
-   descending-specificity conflict. */
-main .button-container { display: inline; }
-
-main a.button:any-link {
-  background: none;
-  border: none;
+main a.button:any-link,
+main a.button.primary,
+main a.button.secondary,
+main a.button.accent {
+  display: inline-block;
+  border: 0;
   border-radius: 0;
-  color: var(--link-color);
-  font-size: inherit;
-  font-weight: inherit;
-  padding: 0;
-  margin: 0;
-  text-decoration: underline;
-  white-space: normal;
+  padding: 14px 35px;
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+main a.button:hover,
+main a.button:focus-visible {
+  background-color: var(--text-color);
+  color: var(--accent-color);
 }
 
 main img {

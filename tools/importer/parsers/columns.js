@@ -180,13 +180,16 @@ export default function parse(element, { document }) {
   }
 
   // CTA link — "Read More". Preserve href + label. Only emit if it is a real link.
+  // Wrap in <strong> so the site's decorateButtons() promotes it to a WKND button.
   const cta = element.querySelector('.cmp-teaser__action-link, .cmp-teaser__action-container a, a[class*="action"]');
   if (cta && cta.getAttribute('href') && cta.textContent.trim()) {
     const link = document.createElement('a');
     link.setAttribute('href', cta.getAttribute('href'));
     link.textContent = cta.textContent.trim();
+    const strong = document.createElement('strong');
+    strong.appendChild(link);
     const p = document.createElement('p');
-    p.appendChild(link);
+    p.appendChild(strong);
     bodyContent.push(p);
   }
 
