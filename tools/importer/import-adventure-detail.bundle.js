@@ -117,6 +117,20 @@ var CustomImportScript = (() => {
         "header.cmp-experiencefragment--header",
         "footer.cmp-experiencefragment--footer"
       ]);
+      WebImporter.DOMUtils.remove(element, [
+        "ol.cmp-tabs__tablist",
+        ".cmp-tabs__tabpanel:not(.cmp-tabs__tabpanel--active)"
+      ]);
+      WebImporter.DOMUtils.remove(element, [
+        "div.sharing"
+      ]);
+      const h1 = element.querySelector("h1");
+      if (h1) {
+        const h1Text = h1.textContent.trim().toLowerCase();
+        element.querySelectorAll("h2, h3, h4").forEach((h) => {
+          if (h.textContent.trim().toLowerCase() === h1Text) h.remove();
+        });
+      }
     }
   }
 
@@ -287,6 +301,16 @@ var CustomImportScript = (() => {
       const hr = document2.createElement("hr");
       main.appendChild(hr);
       WebImporter.rules.createMetadata(main, document2);
+      const metaTable = [...main.querySelectorAll("table")].pop();
+      if (metaTable) {
+        const row = document2.createElement("tr");
+        const k = document2.createElement("td");
+        k.textContent = "template";
+        const v = document2.createElement("td");
+        v.textContent = "adventure-detail";
+        row.append(k, v);
+        metaTable.append(row);
+      }
       WebImporter.rules.transformBackgroundImages(main, document2);
       WebImporter.rules.adjustImageUrls(main, url, params.originalURL);
       const rawPath = new URL(params.originalURL).pathname.replace(/\/$/, "").replace(/\.html?$/, "");

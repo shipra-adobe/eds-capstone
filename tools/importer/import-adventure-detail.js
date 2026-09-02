@@ -147,6 +147,19 @@ export default {
     const hr = document.createElement("hr");
     main.appendChild(hr);
     WebImporter.rules.createMetadata(main, document);
+    // Tag the page with its template so the EDS boilerplate adds an `adventure-detail`
+    // body class (scopes the H1 yellow-underline accent). Lowercase key — getMetadata
+    // queries meta[name="template"].
+    const metaTable = [...main.querySelectorAll("table")].pop();
+    if (metaTable) {
+      const row = document.createElement("tr");
+      const k = document.createElement("td");
+      k.textContent = "template";
+      const v = document.createElement("td");
+      v.textContent = "adventure-detail";
+      row.append(k, v);
+      metaTable.append(row);
+    }
     WebImporter.rules.transformBackgroundImages(main, document);
     WebImporter.rules.adjustImageUrls(main, url, params.originalURL);
 

@@ -1,20 +1,128 @@
+/* WKND footer — dark charcoal band with logo, nav links, Follow Us social row,
+   and legal/attribution text. Values from source computed styles: bg #202020,
+   text #ebebeb. */
 footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+  background-color: #202020;
+  color: #ebebeb;
+  font-family: var(--body-font-family);
+  font-size: 14px;
 }
 
-footer .footer > div {
-  margin: auto;
+footer .footer {
   max-width: 1200px;
-  padding: 40px 24px 24px;
+  margin: auto;
+  padding: 48px 24px 32px;
+  display: grid;
+  grid-template:
+    'brand' auto
+    'nav' auto
+    'social' auto
+    'legal' auto / 1fr;
+  gap: 24px 48px;
 }
 
-footer .footer p {
+footer .footer a:any-link {
+  color: #ebebeb;
+  text-decoration: none;
+}
+
+footer .footer a:hover {
+  color: var(--link-hover-color);
+}
+
+/* brand logo */
+footer .footer-brand {
+  grid-area: brand;
+}
+
+footer .footer-brand p { margin: 0; }
+
+footer .footer-brand img {
+  width: 128px;
+  height: auto;
+  display: block;
+
+  /* source footer logo is white; the shared WKND SVG is black, so invert it
+     for the dark footer band (the header uses the same SVG on a white bar) */
+  filter: invert(1);
+}
+
+/* nav links */
+footer .footer-nav { grid-area: nav; }
+
+footer .footer-nav ul {
+  list-style: none;
   margin: 0;
+  padding: 0;
+  display: flex;
+  flex-flow: column wrap;
+  gap: 12px;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+footer .footer-nav a {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* follow-us social */
+footer .footer-social { grid-area: social; }
+
+footer .footer-social h4 {
+  margin: 0 0 12px;
+  font-family: var(--heading-font-family);
+  font-size: 20px;
+  font-weight: 400;
+  color: #fff;
+}
+
+footer .footer-social h4::after { content: none; }
+
+footer .footer-social p {
+  margin: 0;
+  display: flex;
+  gap: 16px;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+footer .footer-social a {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* legal / attribution */
+footer .footer-legal { grid-area: legal; }
+
+footer .footer-legal p {
+  margin: 0 0 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #b0b0b0;
+}
+
+footer .footer-legal a:any-link {
+  color: #ebebeb;
+  text-decoration: underline;
 }
 
 @media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
+  footer .footer {
+    padding: 56px 32px 40px;
+    grid-template:
+      'brand nav social' auto
+      'legal legal legal' auto / auto 1fr auto;
+    column-gap: 64px;
+  }
+
+  footer .footer-nav ul {
+    flex-direction: row;
+    gap: 32px;
+  }
+
+  footer .footer-legal {
+    margin-top: 24px;
+    max-width: 1000px;
   }
 }

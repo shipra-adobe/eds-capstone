@@ -181,6 +181,17 @@ var CustomImportScript = (() => {
         "ol.cmp-tabs__tablist",
         ".cmp-tabs__tabpanel:not(.cmp-tabs__tabpanel--active)"
       ]);
+      WebImporter.DOMUtils.remove(element, [
+        "div.sharing"
+      ]);
+      element.querySelectorAll(".cmp-teaser--secure img, .cmp-teaser--secure picture").forEach((el) => el.remove());
+      const h1 = element.querySelector("h1");
+      if (h1) {
+        const h1Text = h1.textContent.trim().toLowerCase();
+        element.querySelectorAll("h2, h3, h4").forEach((h) => {
+          if (h.textContent.trim().toLowerCase() === h1Text) h.remove();
+        });
+      }
     }
   }
 

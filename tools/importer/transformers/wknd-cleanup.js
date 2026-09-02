@@ -161,5 +161,25 @@ export default function transform(hookName, element, payload) {
     WebImporter.DOMUtils.remove(element, [
       'div.sharing',
     ]);
+
+    // magazine only: the "Members Only" teasers are gated (.cmp-teaser--secure). The
+    // source hides their images behind the paywall — only the title, description and a
+    // "Read More" affordance show. Our import otherwise emits the teaser image full-width,
+    // which doesn't match the source. Remove images inside secure teasers so the migrated
+    // gated cards are text-only like the source. Narrow class (no-op on other templates).
+    element.querySelectorAll('.cmp-teaser--secure img, .cmp-teaser--secure picture').forEach((el) => el.remove());
+
+    // magazine-article only: the article body repeats the page title as a lower-level
+    // heading (an in-article .cmp-title duplicating the H1). The source shows the title
+    // only once (as the H1); the duplicate lower heading is chrome/anchor scaffolding.
+    // Remove any h2–h4 whose trimmed text exactly matches the page H1 text. Guarded on
+    // an exact H1 match so it never touches legitimately repeated section headings.
+    const h1 = element.querySelector('h1');
+    if (h1) {
+      const h1Text = h1.textContent.trim().toLowerCase();
+      element.querySelectorAll('h2, h3, h4').forEach((h) => {
+        if (h.textContent.trim().toLowerCase() === h1Text) h.remove();
+      });
+    }
   }
 }

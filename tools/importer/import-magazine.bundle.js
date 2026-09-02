@@ -43,6 +43,49 @@ var CustomImportScript = (() => {
 
   // tools/importer/parsers/columns.js
   function parse(element, { document: document2 }) {
+    if (element.matches(".cmp-byline") || element.querySelector(".cmp-byline__name")) {
+      const byline = element.matches(".cmp-byline") ? element : element.querySelector(".cmp-byline");
+      const portrait = byline.querySelector(".cmp-byline__image img, .cmp-image img, img");
+      const textCell = [];
+      const name = byline.querySelector(".cmp-byline__name, h1, h2, h3");
+      if (name && name.textContent.trim()) {
+        textCell.push(name);
+      }
+      const occupation = byline.querySelector(".cmp-byline__occupations, p");
+      if (occupation && occupation.textContent.trim()) {
+        textCell.push(occupation);
+      }
+      let shareScope = byline.querySelector('.cmp-buildingblock--btn-list, [class*="btn-list"], [class*="sharing"]');
+      if (!shareScope) {
+        const searchRoots = [byline.parentElement, element.parentElement].filter(Boolean);
+        for (const root of searchRoots) {
+          shareScope = root.querySelector('.cmp-buildingblock--btn-list, [class*="btn-list"]');
+          if (shareScope) break;
+        }
+      }
+      if (shareScope) {
+        const shareLinks = Array.from(shareScope.querySelectorAll("a[href]"));
+        shareLinks.forEach((a) => {
+          const label = a.textContent.trim();
+          const href = a.getAttribute("href");
+          if (!label || !href) return;
+          const link = document2.createElement("a");
+          link.setAttribute("href", href);
+          link.textContent = label;
+          const p = document2.createElement("p");
+          p.appendChild(link);
+          textCell.push(p);
+        });
+      }
+      if (!portrait && !textCell.length) {
+        element.replaceWith(...element.childNodes);
+        return;
+      }
+      const bylineCells = [[portrait || "", textCell.length ? textCell : ""]];
+      const bylineBlock = WebImporter.Blocks.createBlock(document2, { name: "columns", cells: bylineCells });
+      element.replaceWith(bylineBlock);
+      return;
+    }
     const image = element.querySelector(".cmp-teaser__image img, .cmp-image img, img");
     const bodyContent = [];
     const pretitle = element.querySelector('.cmp-teaser__pretitle, [class*="pretitle"]');
@@ -192,6 +235,21 @@ var CustomImportScript = (() => {
         "header.cmp-experiencefragment--header",
         "footer.cmp-experiencefragment--footer"
       ]);
+      WebImporter.DOMUtils.remove(element, [
+        "ol.cmp-tabs__tablist",
+        ".cmp-tabs__tabpanel:not(.cmp-tabs__tabpanel--active)"
+      ]);
+      WebImporter.DOMUtils.remove(element, [
+        "div.sharing"
+      ]);
+      element.querySelectorAll(".cmp-teaser--secure img, .cmp-teaser--secure picture").forEach((el) => el.remove());
+      const h1 = element.querySelector("h1");
+      if (h1) {
+        const h1Text = h1.textContent.trim().toLowerCase();
+        element.querySelectorAll("h2, h3, h4").forEach((h) => {
+          if (h.textContent.trim().toLowerCase() === h1Text) h.remove();
+        });
+      }
     }
   }
 
