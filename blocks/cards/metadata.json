@@ -1,0 +1,22 @@
+{
+  "variantName": "cards",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-09-01T00:00:00.000Z",
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "comfortable",
+    "purpose": "Responsive grid of cards, each with an optional image and a body of text/links",
+    "imagePattern": "one image per card (4:3)"
+  },
+  "contentPattern": {
+    "structure": "repeating rows; each row is one card with an image cell and a body cell",
+    "buttonCount": 0,
+    "imageCount": 1
+  },
+  "usage": {
+    "pagesUsing": ["index", "/us/en/about-us", "/us/en/magazine"],
+    "reuseCount": 3,
+    "lastUsed": "2026-09-02T00:00:00.000Z"
+  }
+}

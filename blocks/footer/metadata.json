@@ -1,0 +1,22 @@
+{
+  "variantName": "footer",
+  "baseBlock": "footer",
+  "version": "1.0.0",
+  "created": "2026-09-01T00:00:00.000Z",
+  "visualCharacteristics": {
+    "colorScheme": "dark",
+    "density": "comfortable",
+    "purpose": "Site footer, auto-loaded from the footer fragment document",
+    "imagePattern": "none"
+  },
+  "contentPattern": {
+    "structure": "auto-block loaded from a footer fragment; not authored inline via a block table",
+    "buttonCount": 0,
+    "imageCount": 0
+  },
+  "usage": {
+    "pagesUsing": [],
+    "reuseCount": 0,
+    "lastUsed": "2026-09-01T00:00:00.000Z"
+  }
+}

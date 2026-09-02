@@ -1,0 +1,22 @@
+{
+  "variantName": "columns",
+  "baseBlock": "columns",
+  "version": "1.0.0",
+  "created": "2026-09-01T00:00:00.000Z",
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "comfortable",
+    "purpose": "Side-by-side columns of text and/or images that stack on small screens",
+    "imagePattern": "optional image per column"
+  },
+  "contentPattern": {
+    "structure": "one row with N cells; each cell is a column of text or a single image",
+    "buttonCount": 0,
+    "imageCount": 1
+  },
+  "usage": {
+    "pagesUsing": ["index", "/us/en/magazine"],
+    "reuseCount": 2,
+    "lastUsed": "2026-09-02T00:00:00.000Z"
+  }
+}

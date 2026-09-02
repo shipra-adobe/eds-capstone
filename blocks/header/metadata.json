@@ -1,0 +1,22 @@
+{
+  "variantName": "header",
+  "baseBlock": "header",
+  "version": "1.0.0",
+  "created": "2026-09-01T00:00:00.000Z",
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "comfortable",
+    "purpose": "Site header/navigation, auto-loaded from the nav fragment document",
+    "imagePattern": "logo/brand image"
+  },
+  "contentPattern": {
+    "structure": "auto-block loaded from a nav fragment; not authored inline via a block table",
+    "buttonCount": 0,
+    "imageCount": 1
+  },
+  "usage": {
+    "pagesUsing": [],
+    "reuseCount": 0,
+    "lastUsed": "2026-09-01T00:00:00.000Z"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "da",
+  "sites": {
+    "eds-capstone": {
+      "previewOrg": "shipra-adobe",
+      "previewSite": "eds-capstone",
+      "contentHostUrl": "https://content.da.live/shipra-adobe/eds-capstone/",
+      "libraryUrl": "https://main--sta-boilerplate--aemdemos.aem.page/tools/sidekick/library.json"
+    }
+  },
+  "features": [
+    "site-planning"
+  ]
+}

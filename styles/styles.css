@@ -1,3 +1,5 @@
+@import url('brand.css');
+
 /*
  * Copyright 2020 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -11,30 +13,30 @@
  */
 
 :root {
-  /* colors */
-  --background-color: white;
+  /* colors — from brand.css (WKND: white bg, near-black text, underlined links) */
+  --background-color: #fff;
   --light-color: #f8f8f8;
-  --dark-color: #505050;
-  --text-color: #131313;
-  --link-color: #3b63fb;
-  --link-hover-color: #1d3ecf;
+  --dark-color: #202020;
+  --text-color: #202020;
+  --link-color: #202020;
+  --link-hover-color: #ebeb00;
 
-  /* fonts */
-  --body-font-family: roboto, roboto-fallback, sans-serif;
-  --heading-font-family: roboto-condensed, roboto-condensed-fallback, sans-serif;
+  /* fonts — WKND: Asar (headings), Source Sans Pro (body) */
+  --body-font-family: "Source Sans Pro", "Helvetica Neue", helvetica, arial, sans-serif;
+  --heading-font-family: "Asar", georgia, "Times New Roman", times, serif;
 
   /* body sizes */
-  --body-font-size-m: 22px;
-  --body-font-size-s: 19px;
-  --body-font-size-xs: 17px;
+  --body-font-size-m: 16px;
+  --body-font-size-s: 14px;
+  --body-font-size-xs: 13px;
 
-  /* heading sizes */
-  --heading-font-size-xxl: 55px;
-  --heading-font-size-xl: 44px;
-  --heading-font-size-l: 34px;
-  --heading-font-size-m: 27px;
-  --heading-font-size-s: 24px;
-  --heading-font-size-xs: 22px;
+  /* heading sizes (desktop values from brand.json) */
+  --heading-font-size-xxl: 40px;
+  --heading-font-size-xl: 36px;
+  --heading-font-size-l: 24px;
+  --heading-font-size-m: 16px;
+  --heading-font-size-s: 14px;
+  --heading-font-size-xs: 16px;
 
   /* nav height */
   --nav-height: 64px;
@@ -53,20 +55,15 @@
   src: local('Arial');
 }
 
-@media (width >= 900px) {
+@media (width <= 900px) {
   :root {
-    /* body sizes */
-    --body-font-size-m: 18px;
-    --body-font-size-s: 16px;
-    --body-font-size-xs: 14px;
-
-    /* heading sizes */
-    --heading-font-size-xxl: 45px;
-    --heading-font-size-xl: 36px;
-    --heading-font-size-l: 28px;
-    --heading-font-size-m: 22px;
-    --heading-font-size-s: 20px;
-    --heading-font-size-xs: 18px;
+    /* mobile heading sizes (from brand.json) */
+    --heading-font-size-xxl: 36px;
+    --heading-font-size-xl: 28px;
+    --heading-font-size-l: 24px;
+    --heading-font-size-m: 20px;
+    --heading-font-size-s: 18px;
+    --heading-font-size-xs: 16px;
   }
 }
 
@@ -107,8 +104,8 @@ h6 {
   margin-top: 0.8em;
   margin-bottom: 0.25em;
   font-family: var(--heading-font-family);
-  font-weight: 600;
-  line-height: 1.25;
+  font-weight: 400;
+  line-height: 1.5;
   scroll-margin: 40px;
 }
 
@@ -116,7 +113,24 @@ h1 { font-size: var(--heading-font-size-xxl); }
 h2 { font-size: var(--heading-font-size-xl); }
 h3 { font-size: var(--heading-font-size-l); }
 h4 { font-size: var(--heading-font-size-m); }
-h5 { font-size: var(--heading-font-size-s); }
+
+/* WKND: section headings (h2) carry a short yellow underline accent */
+main h2::after {
+  content: "";
+  display: block;
+  width: 84px;
+  margin-top: 8px;
+  border-bottom: 2px solid var(--accent-color);
+}
+
+/* WKND: role subtitles (h5) use the body font, bold + uppercase */
+h5 {
+  font-size: var(--heading-font-size-s);
+  font-family: var(--body-font-family);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
 h6 { font-size: var(--heading-font-size-xs); }
 
 p,
@@ -276,6 +290,24 @@ button.button.accent:disabled:focus-visible {
   background-color: var(--light-color);
   border-color: var(--light-color);
   color: var(--dark-color);
+}
+
+/* EDS button reset — WKND renders inline text links, not pill buttons.
+   Placed after the .button rules above so it overrides them without a
+   descending-specificity conflict. */
+main .button-container { display: inline; }
+
+main a.button:any-link {
+  background: none;
+  border: none;
+  border-radius: 0;
+  color: var(--link-color);
+  font-size: inherit;
+  font-weight: inherit;
+  padding: 0;
+  margin: 0;
+  text-decoration: underline;
+  white-space: normal;
 }
 
 main img {

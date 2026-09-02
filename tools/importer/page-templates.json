@@ -1,0 +1,175 @@
+{
+  "metadata": {
+    "projectType": "da"
+  },
+  "templates": [
+    {
+      "name": "magazine",
+      "urls": [
+        "https://wknd.site/us/en/magazine.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/magazine.html",
+      "description": "Magazine index: page title, featured article teaser, article listing grid",
+      "blocks": [
+        {
+          "name": "columns",
+          "instances": [
+            "div.teaser.cmp-teaser--featured"
+          ]
+        },
+        {
+          "name": "cards",
+          "instances": [
+            "div.image-list.list"
+          ]
+        }
+      ],
+      "urlPattern": "/us/en/*",
+      "sections": [
+        {
+          "id": "rc1",
+          "name": "Page Title",
+          "selector": "div.title.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(1)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.title.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(1)"
+          ]
+        },
+        {
+          "id": "rc2",
+          "name": "Featured Article",
+          "selector": "div.teaser.cmp-teaser--featured.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [
+            "columns"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc3",
+          "name": "All Articles Heading",
+          "selector": "div.title.cmp-title--underline.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(3)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.title.cmp-title--underline.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(3)"
+          ]
+        },
+        {
+          "id": "rc4",
+          "name": "Article Grid",
+          "selector": "div.image-list.list.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc5",
+          "name": "Members Only Heading",
+          "selector": "div.title.cmp-title--underline.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(5)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.title.cmp-title--underline.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(5)"
+          ]
+        },
+        {
+          "id": "rc6",
+          "name": "Members CTA",
+          "selector": "div.text.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.text.aem-GridColumn.aem-GridColumn--default--12"
+          ]
+        },
+        {
+          "id": "rc7",
+          "name": "Separator",
+          "selector": "div.separator.cmp-separator--space-medium.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.separator.cmp-separator--space-medium.aem-GridColumn.aem-GridColumn--default--12"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "about-us",
+      "urls": [
+        "https://wknd.site/us/en/about-us.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/about-us.html",
+      "description": "About Us page: page title, contributor card grid, guides card grid",
+      "urlPattern": "/us/en/*",
+      "blocks": [
+        {
+          "name": "cards",
+          "instances": [
+            ".experiencefragment.cmp-experience-fragment--contributor"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "rc1",
+          "name": "Page Title",
+          "selector": "body > div.root.container.responsivegrid > div.cmp-container > div.aem-Grid.aem-Grid--12.aem-Grid--default--12 > main.container.responsivegrid.cmp-layout-container--fixed.aem-GridColumn.aem-GridColumn--default--12 > div.cmp-container > div.aem-Grid.aem-Grid--12.aem-Grid--tablet--12.aem-Grid--default--12.aem-Grid--phone--12 > div.title.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(1)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.title.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(1)"
+          ]
+        },
+        {
+          "id": "rc2",
+          "name": "Our Contributors Heading",
+          "selector": "div.title.cmp-title--underline.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.title.cmp-title--underline.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2)"
+          ]
+        },
+        {
+          "id": "rc3",
+          "name": "Contributors",
+          "selector": "div.text.cmp-text--font-small.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(3)",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": [
+            "div.text.cmp-text--font-small.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(3)"
+          ]
+        },
+        {
+          "id": "rc4",
+          "name": "WKND Guides Heading",
+          "selector": "div.title.cmp-title--underline.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(4)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.title.cmp-title--underline.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(4)"
+          ]
+        },
+        {
+          "id": "rc5",
+          "name": "Guides",
+          "selector": "div.text.cmp-text--font-small.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(5)",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": [
+            "div.text.cmp-text--font-small.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(5)"
+          ]
+        }
+      ]
+    }
+  ]
+}
