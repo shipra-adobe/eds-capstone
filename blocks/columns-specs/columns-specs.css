@@ -1,0 +1,62 @@
+/*
+ * columns-specs
+ * Adventure spec / metadata sidebar: a vertical list of label/value pairs.
+ * Each row (.columns-specs > div) has a light-grey left accent border, a small
+ * uppercase muted label (first cell) above a slightly larger bold uppercase
+ * value (second cell). Values extracted from wknd.site computed styles.
+ *
+ * Decorated DOM (no img cols on this page):
+ *   .columns-specs > div            <- row (spec)
+ *     > div:first-child > p          <- label (dt)
+ *     > div:last-child  > p          <- value (dd)
+ */
+
+.columns-specs {
+  padding: 0 14px;
+  margin: 18px 0;
+}
+
+/* each spec row */
+.columns-specs > div {
+  padding: 0 18px;
+  margin: 0 0 22.5px;
+  border-left: 5px solid #ebebeb;
+}
+
+.columns-specs > div:last-child {
+  margin-bottom: 0;
+}
+
+/* label (first cell) — small, uppercase, muted */
+.columns-specs > div > div:first-child,
+.columns-specs > div > div:first-child p {
+  margin: 0;
+  padding: 0;
+  font-family: var(--body-font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  text-transform: uppercase;
+  color: rgb(105 105 105);
+}
+
+.columns-specs > div > div:first-child {
+  padding-top: 12px;
+}
+
+/* value (second cell) — larger, bold, uppercase, near-black */
+.columns-specs > div > div:last-child,
+.columns-specs > div > div:last-child p {
+  margin: 0;
+  padding: 0;
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+.columns-specs > div > div:last-child {
+  padding-top: 7px;
+}

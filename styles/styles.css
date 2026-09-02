@@ -355,3 +355,56 @@ main .section.highlight {
   margin: 0;
   padding: 40px 0;
 }
+
+/* adventure-detail two-column layout — the section that holds BOTH the
+   columns-specs sidebar and the tabs-detail content (WKND adventure pages).
+   Source layout: narrow spec sidebar (left) beside the wide tabbed content
+   (right). The section's inner wrapper is a 4-child stack (title, specs,
+   share, tabs); on desktop we place them into a 2-column grid so specs+share
+   sit in a narrow left column and title+tabs in a wide right column. */
+@media (width >= 900px) {
+  main > .section.columns-specs-container.tabs-detail-container {
+    display: grid;
+    grid-template-columns: 25% 1fr;
+    column-gap: 32px;
+    align-items: start;
+
+    /* keep the standard content inset (the wrappers below drop their own
+       max-width/margin/padding, so the horizontal padding lives here) */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* the generic `main > .section > div { max-width:1200px; margin:auto }` rule
+     centers each wrapper within its grid area; inside this grid the wrappers
+     should fill their column and align left instead */
+  main > .section.columns-specs-container.tabs-detail-container > div {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  main > .section.columns-specs-container.tabs-detail-container > .default-content-wrapper:first-child {
+    /* page title (H1) spans both columns, left-aligned like the source */
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+
+  main > .section.columns-specs-container.tabs-detail-container > .columns-specs-wrapper {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  main > .section.columns-specs-container.tabs-detail-container > .default-content-wrapper:nth-child(3) {
+    /* "Share this Adventure" — stays under the specs in the left column */
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  main > .section.columns-specs-container.tabs-detail-container > .tabs-detail-wrapper {
+    /* tabbed content occupies the right column, spanning the specs + share rows */
+    grid-column: 2;
+    grid-row: 2 / 4;
+  }
+}

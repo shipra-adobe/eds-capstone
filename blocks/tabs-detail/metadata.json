@@ -1,0 +1,39 @@
+{
+  "variantName": "tabs-detail",
+  "baseBlock": "tabs",
+  "version": "1.0.0",
+  "created": "2026-09-02T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://wknd.site/us/en/adventures/bali-surf-camp.html",
+    "originPage": "WKND adventure detail page",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "comfortable",
+    "purpose": "tabbed-content",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "first row = block name; each subsequent row = tab label cell + tab content cell",
+    "buttonCount": 0,
+    "imageCount": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "detail pages with sectioned content (Overview / Itinerary / What to Bring)",
+      "grouping closely related rich-text panels behind labeled tabs",
+      "reducing scrolling by grouping content"
+    ],
+    "notSuitableFor": [
+      "brief content that fits in one section",
+      "content that must all be visible at once (consider default content or accordion)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/us/en/adventures/bali-surf-camp"],
+    "reuseCount": 1,
+    "lastUsed": "2026-09-02T00:00:00.000Z"
+  },
+  "blockCollectionReference": "https://main--sta-boilerplate--aemdemos.aem.page/block-collection/tabs.plain.html"
+}

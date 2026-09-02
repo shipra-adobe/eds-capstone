@@ -1,0 +1,101 @@
+/* tabs-detail — WKND adventure tabbed content.
+   Values extracted from wknd.site source computed styles (cmp-tabs).
+   Decorated DOM (see tabs-detail.js):
+     .tabs-detail
+       .tabs-detail-list[role=tablist]
+         button.tabs-detail-tab[role=tab][aria-selected]
+       .tabs-detail-panel[role=tabpanel][aria-hidden]  (content cell inside) */
+
+/* tab list: horizontal row, no gap; source margin 18px 0 */
+.tabs-detail .tabs-detail-list {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0;
+  margin: 18px 0;
+  padding: 0;
+  max-width: 100%;
+  list-style: none;
+}
+
+/* tab button — inactive state: dark text on transparent, uppercase */
+.tabs-detail .tabs-detail-list button.tabs-detail-tab {
+  flex: 0 0 auto;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 8px 16px;
+  background-color: transparent;
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* active tab — filled dark block with white text */
+.tabs-detail .tabs-detail-list button.tabs-detail-tab[aria-selected='true'] {
+  background-color: var(--text-color);
+  color: var(--background-color);
+  cursor: default;
+}
+
+/* panel — no border, no padding, transparent; body text 18px/27px */
+.tabs-detail .tabs-detail-panel {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  color: var(--text-color);
+  font-size: 18px;
+  line-height: 27px;
+  overflow: visible;
+}
+
+.tabs-detail .tabs-detail-panel[aria-hidden='true'] {
+  display: none;
+}
+
+/* panel paragraphs — source 18px, line-height 45px, margin 0 0 13.5px */
+.tabs-detail .tabs-detail-panel p {
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  line-height: 45px;
+  color: var(--text-color);
+  margin: 0 0 13.5px;
+}
+
+.tabs-detail .tabs-detail-panel ul,
+.tabs-detail .tabs-detail-panel ol {
+  font-size: 18px;
+  line-height: 45px;
+}
+
+/* inline image within panel — full width of panel, small vertical margin */
+.tabs-detail .tabs-detail-panel img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 7px 0;
+  border-radius: 0;
+  object-fit: fill;
+}
+
+/* the image sits in its own <p> after EDS wraps it — reset that p to block */
+.tabs-detail .tabs-detail-panel p:has(> picture),
+.tabs-detail .tabs-detail-panel p:has(> img) {
+  margin: 7px 0;
+  line-height: 0;
+}
+
+/* tab-button label paragraph reset — last so it wins over panel p rules
+   (equal/higher specificity, later in source) */
+.tabs-detail .tabs-detail-list button.tabs-detail-tab p {
+  margin: 0;
+}

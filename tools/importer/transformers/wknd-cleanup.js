@@ -3,13 +3,22 @@
 
 /**
  * Transformer: wknd site-wide cleanup.
- * All selectors verified against migration-work/cleaned.html (about-us and magazine pages).
+ * All selectors verified against migration-work/cleaned.html (about-us, magazine,
+ * and adventure-detail pages).
  * Removes non-authorable site chrome (header, footer, mobile nav, ID-sync iframe)
  * so the import contains only page-level authorable content from <main>.
  * Site chrome is identical across templates (shared experiencefragment header/footer,
  * same #toggleNav/#mobileNav/ID-sync iframe); magazine's authorable teaser, image-list,
  * text and separator (bare <hr>) all live inside <main> and are untouched. No new
  * chrome on magazine → no selector changes needed.
+ * adventure-detail (bali-surf-camp) re-verified: the ONLY iframe on the page is the
+ * demdex ID-sync iframe (non-authorable), so the bare 'iframe' selector is safe here.
+ * The new adventure-detail authorable content — breadcrumb (div.breadcrumb.cmp-breadcrumb--fixed,
+ * KEPT as section-1 default content), hero carousel (div.carousel.cmp-carousel--mini),
+ * spec sidebar (div.contentfragment.cmp-contentfragment--elements) and tabs
+ * (div.tabs.panelcontainer) — is not matched by any cleanup selector and is preserved.
+ * The nested layout main (main.cmp-layout-container--fixed) is likewise untouched.
+ * No selector changes needed for adventure-detail.
  */
 const TransformHook = { beforeTransform: 'beforeTransform', afterTransform: 'afterTransform' };
 

@@ -4,6 +4,83 @@
   },
   "templates": [
     {
+      "name": "adventure-detail",
+      "urls": [
+        "https://wknd.site/us/en/adventures/bali-surf-camp.html",
+        "https://wknd.site/us/en/adventures/beervana-portland.html",
+        "https://wknd.site/us/en/adventures/climbing-new-zealand.html",
+        "https://wknd.site/us/en/adventures/colorado-rock-climbing.html",
+        "https://wknd.site/us/en/adventures/cycling-southern-utah.html",
+        "https://wknd.site/us/en/adventures/cycling-tuscany.html",
+        "https://wknd.site/us/en/adventures/downhill-skiing-wyoming.html",
+        "https://wknd.site/us/en/adventures/gastronomic-marais-tour.html",
+        "https://wknd.site/us/en/adventures/napa-wine-tasting.html",
+        "https://wknd.site/us/en/adventures/riverside-camping-australia.html",
+        "https://wknd.site/us/en/adventures/ski-touring-mont-blanc.html",
+        "https://wknd.site/us/en/adventures/surf-camp-costa-rica.html",
+        "https://wknd.site/us/en/adventures/tahoe-skiing.html",
+        "https://wknd.site/us/en/adventures/west-coast-cycling.html",
+        "https://wknd.site/us/en/adventures/whistler-mountain-biking.html",
+        "https://wknd.site/us/en/adventures/yosemite-backpacking.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/adventures/bali-surf-camp.html",
+      "description": "Adventure detail: breadcrumb, hero image, spec sidebar, tabbed content",
+      "blocks": [
+        {
+          "name": "hero",
+          "instances": [
+            "div.carousel.panelcontainer.cmp-carousel--mini"
+          ]
+        },
+        {
+          "name": "columns-specs",
+          "instances": [
+            "div.contentfragment.cmp-contentfragment--elements"
+          ]
+        },
+        {
+          "name": "tabs-detail",
+          "instances": [
+            "div.tabs.panelcontainer"
+          ]
+        }
+      ],
+      "urlPattern": "/us/en/adventures/*",
+      "sections": [
+        {
+          "id": "rc1",
+          "name": "Breadcrumb",
+          "selector": "div.breadcrumb.cmp-breadcrumb--fixed.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.breadcrumb.cmp-breadcrumb--fixed.aem-GridColumn.aem-GridColumn--default--12"
+          ]
+        },
+        {
+          "id": "rc2",
+          "name": "Hero",
+          "selector": "div.carousel.panelcontainer.cmp-carousel--mini.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [
+            "hero"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc3",
+          "name": "Adventure Detail",
+          "selector": "main.container.responsivegrid.cmp-layout-container--fixed.aem-GridColumn.aem-GridColumn--default--12",
+          "style": null,
+          "blocks": [
+            "columns-specs",
+            "tabs-detail"
+          ],
+          "defaultContent": []
+        }
+      ]
+    },
+    {
       "name": "magazine",
       "urls": [
         "https://wknd.site/us/en/magazine.html"
