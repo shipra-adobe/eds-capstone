@@ -8,7 +8,10 @@ footer {
   font-size: 14px;
 }
 
-footer .footer {
+/* The footer fragment's four sections (brand/nav/social/legal) are wrapped by
+   EDS in an intermediate div inside .footer.block, so the grid must be applied
+   to that wrapper — the direct parent of the .footer-* sections. */
+footer .footer > div {
   max-width: 1200px;
   margin: auto;
   padding: 48px 24px 32px;
@@ -71,10 +74,12 @@ footer .footer-social { grid-area: social; }
 
 footer .footer-social h4 {
   margin: 0 0 12px;
-  font-family: var(--heading-font-family);
-  font-size: 20px;
-  font-weight: 400;
-  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: normal;
+  color: #ebebeb;
 }
 
 footer .footer-social h4::after { content: none; }
@@ -108,17 +113,31 @@ footer .footer-legal a:any-link {
 }
 
 @media (width >= 900px) {
-  footer .footer {
+  footer .footer > div {
     padding: 56px 32px 40px;
     grid-template:
       'brand nav social' auto
-      'legal legal legal' auto / auto 1fr auto;
+      'legal legal legal' auto / auto auto 1fr;
     column-gap: 64px;
+    align-items: center;
   }
 
   footer .footer-nav ul {
     flex-direction: row;
     gap: 32px;
+  }
+
+  /* Follow Us + social icons sit at the far right of the row (source layout),
+     with the "Follow Us" label inline-left of the icons. */
+  footer .footer-social {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  footer .footer-social h4 {
+    margin: 0;
   }
 
   footer .footer-legal {
