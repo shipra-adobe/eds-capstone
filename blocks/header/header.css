@@ -239,10 +239,12 @@ header nav[aria-expanded='true'] {
     margin: 0;
   }
 
+  /* nav links right-aligned toward the search (source groups them at the right
+     edge next to the search field, not centered in the row) */
   header nav .nav-sections ul {
     display: flex;
     gap: 0;
-    justify-content: center;
+    justify-content: flex-end;
   }
 
   /* each nav item shrink-wraps its link so the padded yellow chip stays within the
