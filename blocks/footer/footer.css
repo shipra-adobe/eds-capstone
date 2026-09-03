@@ -87,14 +87,31 @@ footer .footer-social h4::after { content: none; }
 footer .footer-social p {
   margin: 0;
   display: flex;
-  gap: 16px;
+  gap: 2px;
 }
 
+/* social icon chips — source renders each link as a 48x48 light chip (#ebebeb)
+   with a dark brand glyph (icon font). We use inline SVGs instead. */
 /* stylelint-disable-next-line no-descending-specificity */
-footer .footer-social a {
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+footer .footer-social a.footer-social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: #ebebeb;
+  color: #202020;
+}
+
+footer .footer-social a.footer-social-icon:hover {
+  background-color: #fff;
+  color: #202020;
+}
+
+footer .footer-social a.footer-social-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: currentcolor;
 }
 
 /* legal / attribution */
