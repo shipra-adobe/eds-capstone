@@ -201,13 +201,16 @@ header nav[aria-expanded='true'] {
     position: relative;
   }
 
-  /* utility bar spans full width above the main nav */
+  /* utility bar spans full width above the main nav. The source white nav bar is
+     tall — a ~48px logo row with ~50px vertical padding (≈150px). Add bottom
+     padding on the nav so the main bar matches the source height (the utility
+     row sits flush at the very top). */
   header nav,
   header nav[aria-expanded='true'] {
     display: grid;
     grid-template:
       'utility utility utility' auto
-      'brand sections tools' var(--nav-height) / auto 1fr auto;
+      'brand sections tools' 145px / auto 1fr auto;
     gap: 0 32px;
     max-width: 1264px;
     padding: 0 32px;
