@@ -298,3 +298,119 @@ header nav[aria-expanded='true'] {
     width: 200px;
   }
 }
+
+/* Language selector — flag toggle + country dropdown (source .cmp-languagenavigation).
+   Lives in the dark utility strip; the panel drops below, right-aligned. */
+.lang-selector {
+  position: relative;
+}
+
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.lang-toggle .lang-flag {
+  width: 24px;
+  height: 16px;
+  object-fit: cover;
+  display: block;
+}
+
+.lang-caret {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentcolor;
+  transition: transform 0.2s;
+}
+
+.lang-toggle[aria-expanded='true'] .lang-caret {
+  transform: rotate(180deg);
+}
+
+/* dropdown panel */
+.lang-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 10;
+  min-width: 300px;
+  background-color: #202020;
+  color: #ebebeb;
+  box-shadow: 0 6px 24px rgb(0 0 0 / 35%);
+}
+
+.lang-panel[hidden] {
+  display: none;
+}
+
+.lang-country {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.lang-country:last-child {
+  border-bottom: 0;
+}
+
+.lang-country .lang-flag {
+  width: 32px;
+  height: 22px;
+  object-fit: cover;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.lang-country-name {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #b0b0b0;
+}
+
+.lang-locales {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.lang-locales a:any-link {
+  color: #ebebeb;
+  text-decoration: none;
+}
+
+.lang-locales a:hover {
+  text-decoration: underline;
+}
+
+/* non-migrated locales: visible for parity but not clickable */
+.lang-locale-disabled {
+  color: #ebebeb;
+  cursor: default;
+}
+
+.lang-sep {
+  color: #6a6a6a;
+}

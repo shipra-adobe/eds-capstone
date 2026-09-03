@@ -46,6 +46,88 @@ function toggleMenu(nav, forceExpanded = null) {
   if (button) button.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
 }
 
+// WKND language navigation model. Each country has a flag (SVG under
+// /images/country-flags/) and one or more locales. Only en-US is a migrated
+// page in this project; every other locale is shown for visual parity with the
+// source but does NOT navigate (href '#') so no link 404s.
+const LANGUAGE_NAV = [
+  { country: 'United States', flag: 'US', locales: [{ label: 'EN-US', href: '/us/en' }, { label: 'ES-US' }] },
+  { country: 'Canada', flag: 'CA', locales: [{ label: 'EN-CA' }, { label: 'FR-CA' }] },
+  { country: 'Switzerland', flag: 'CH', locales: [{ label: 'DE-CH' }, { label: 'FR-CH' }, { label: 'IT-CH' }] },
+  { country: 'Germany', flag: 'DE', locales: [{ label: 'DE-DE' }] },
+  { country: 'France', flag: 'FR', locales: [{ label: 'FR-FR' }] },
+  { country: 'Spain', flag: 'ES', locales: [{ label: 'ES-ES' }] },
+  { country: 'Italy', flag: 'IT', locales: [{ label: 'IT-IT' }] },
+];
+
+const FLAG_BASE = '/images/country-flags';
+
+/**
+ * Replace the plain "EN-US" utility link with the WKND flag toggle + country
+ * dropdown (source: .cmp-languagenavigation). The toggle shows the US flag and
+ * "EN-US"; clicking it opens a panel listing every country/locale, each with a
+ * flag. Only the US-English locale links to a real page.
+ * @param {Element} nav
+ */
+function buildLanguageSelector(nav) {
+  const utility = nav.querySelector('.nav-utility');
+  if (!utility) return;
+  // The lang link is the utility entry pointing at the language anchor.
+  const langLink = [...utility.querySelectorAll('a')]
+    .find((a) => /^#lang/i.test(a.getAttribute('href') || '') || /en-us/i.test(a.textContent.trim()));
+  if (!langLink) return;
+  const wrapper = langLink.closest('p') || langLink;
+
+  const selector = document.createElement('div');
+  selector.className = 'lang-selector';
+
+  // Toggle button: flag + current locale label + caret.
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'lang-toggle';
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.setAttribute('aria-label', 'Toggle Language en-US');
+  toggle.innerHTML = `<img class="lang-flag" src="${FLAG_BASE}/US.svg" alt="" width="24" height="16">`
+    + '<span class="lang-current">EN-US</span>'
+    + '<span class="lang-caret" aria-hidden="true"></span>';
+
+  // Panel: one row per country (flag + name + locale links).
+  const panel = document.createElement('div');
+  panel.className = 'lang-panel';
+  panel.hidden = true;
+  LANGUAGE_NAV.forEach((entry) => {
+    const row = document.createElement('div');
+    row.className = 'lang-country';
+    const locales = entry.locales.map((loc) => {
+      if (loc.href) return `<a href="${loc.href}">${loc.label}</a>`;
+      // Non-migrated locale: render as a non-navigating span for visual parity.
+      return `<span class="lang-locale-disabled">${loc.label}</span>`;
+    }).join('<span class="lang-sep">|</span>');
+    row.innerHTML = `<img class="lang-flag" src="${FLAG_BASE}/${entry.flag}.svg" alt="" width="24" height="16">`
+      + `<div class="lang-country-body"><p class="lang-country-name">${entry.country}</p>`
+      + `<p class="lang-locales">${locales}</p></div>`;
+    panel.append(row);
+  });
+
+  selector.append(toggle, panel);
+  wrapper.replaceWith(selector);
+
+  const setOpen = (open) => {
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.hidden = !open;
+  };
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+  document.addEventListener('click', (e) => {
+    if (!selector.contains(e.target)) setOpen(false);
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Escape') setOpen(false);
+  });
+}
+
 /**
  * loads and decorates the header nav
  * @param {Element} block The header block element
@@ -65,6 +147,12 @@ export default async function decorate(block) {
     const section = nav.children[i];
     if (section) section.classList.add(`nav-${c}`);
   });
+
+  // Language selector: replace the plain "EN-US" utility link with the WKND
+  // flag toggle + country dropdown (source: .cmp-languagenavigation). Only the
+  // US English locale is a migrated page; the other locales are shown for visual
+  // parity but do not navigate (this migration covers wknd.site/us/en only).
+  buildLanguageSelector(nav);
 
   // Active nav link: mark the link whose target matches the current page so it can
   // render as a yellow chip (source: .cmp-navigation__item--active). Normalize both
