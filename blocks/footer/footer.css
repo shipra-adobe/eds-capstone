@@ -87,7 +87,7 @@ footer .footer-social h4::after { content: none; }
 footer .footer-social p {
   margin: 0;
   display: flex;
-  gap: 2px;
+  gap: 0;
 }
 
 /* social icon chips — source renders each link as a 48x48 light chip (#ebebeb)
@@ -109,8 +109,8 @@ footer .footer-social a.footer-social-icon:hover {
 }
 
 footer .footer-social a.footer-social-icon svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   fill: currentcolor;
 }
 
