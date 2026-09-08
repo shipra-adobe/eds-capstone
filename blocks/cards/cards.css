@@ -1,27 +1,205 @@
+/* Block: cards — WKND contributor/guide cards.
+ * Values extracted from source computed styles at
+ * https://wknd.site/us/en/about-us.html (.cmp-experience-fragment--contributor).
+ * Circular photo, centered text, name (Asar), uppercase role, dark social row. */
+
 .cards > ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
+  grid-template-columns: 1fr;
   gap: 24px;
 }
 
 .cards > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
+  /* WKND cards have no border, no card background — just centered content */
+  border: none;
+  background-color: transparent;
+  padding: 9px 14px 18px;
+  text-align: center;
 }
 
-.cards .cards-card-body {
-  margin: 16px;
-}
-
+/* photo — 164px circle, cover-cropped */
 .cards .cards-card-image {
   line-height: 0;
+  margin: 7px 0;
+}
+
+.cards .cards-card-image picture {
+  display: inline-block;
 }
 
 .cards > ul > li img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
+  width: 164px;
+  height: 164px;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
   object-fit: cover;
+}
+
+/* body — centered text block */
+.cards .cards-card-body {
+  margin: 0;
+}
+
+/* name (h3, Asar serif) */
+.cards .cards-card-body h3 {
+  margin: 0 0 6px;
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-l); /* 24px */
+  font-weight: 400;
+  line-height: 36px;
+  color: var(--text-color);
+}
+
+/* role subtitle — first paragraph, uppercase Source Sans Pro bold */
+.cards .cards-card-body > p:first-of-type {
+  margin: 0 0 3.5px;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-s); /* 14px */
+  font-weight: 600;
+  line-height: 21px;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+/* social links — horizontal row of dark boxes (source: 48px icon squares) */
+.cards .cards-card-social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+  margin: 14px 0 0;
+}
+
+.cards .cards-card-body .cards-card-social p {
+  margin: 0;
+}
+
+.cards .cards-card-social a:any-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
+  padding: 0 12px;
+  background-color: var(--dark-color);
+  color: #ebebeb;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.cards .cards-card-social a:hover {
+  background-color: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Source uses fixed 25% columns: phone 1-up, tablet 2-up, desktop 4-up,
+ * items left-packed (a 3-card grid leaves the 4th slot empty). */
+@media (width >= 600px) {
+  .cards > ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width >= 900px) {
+  .cards > ul {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ============================================================
+ * Variant: .cards.articles — WKND magazine article grid.
+ * Values extracted from source computed styles at
+ * https://wknd.site/us/en/magazine.html (.cmp-image-list).
+ * Rectangular 260x200 thumbnails, left-aligned text, Source Sans
+ * Pro uppercase titles. Overrides the default circular/centered
+ * contributor-card styles above. Scoped under .cards.articles only.
+ * ============================================================ */
+
+/* Left-packed flex grid: fixed 260px cards wrap, ~4 per row on
+ * desktop, fewer as the viewport narrows (matches source flex-wrap). */
+.cards.articles > ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.cards.articles > ul > li {
+  flex: 0 1 260px;
+  box-sizing: content-box;
+
+  /* flex items default to min-width:auto and refuse to shrink below the
+   * intrinsic image width; reset so the 260px basis is honoured */
+  min-width: 0;
+  margin: 0 0 32px;
+  padding: 0 14px 0 0;
+  text-align: left;
+}
+
+/* rectangular thumbnail — 260x200 (13:10), square corners, cover-cropped */
+.cards.articles .cards-card-image {
+  margin: 0;
+  line-height: 0;
+}
+
+.cards.articles .cards-card-image picture {
+  display: block;
+}
+
+.cards.articles > ul > li img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  aspect-ratio: 260 / 200;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+/* body — left-aligned text block */
+.cards.articles .cards-card-body {
+  margin: 0;
+  text-align: left;
+}
+
+/* title — Source Sans Pro 18px, regular weight, sentence case (matches source) */
+.cards.articles .cards-card-body h3 {
+  margin: 2px 0 0;
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 27px;
+  text-transform: none;
+  color: var(--text-color);
+}
+
+.cards.articles .cards-card-body h3 a:any-link {
+  font-weight: 400;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+/* description — 14px muted grey, uppercase, single-line ellipsis */
+.cards.articles .cards-card-body p {
+  margin: 16px 0 0;
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  text-transform: uppercase;
+  color: rgb(105 105 105);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* mobile: one full-width card per row */
+@media (width < 600px) {
+  .cards.articles > ul > li {
+    flex-basis: 100%;
+    padding-right: 0;
+  }
 }

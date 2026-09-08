@@ -1,0 +1,86 @@
+/* eslint-disable */
+/* global WebImporter */
+
+/**
+ * Transformer: wknd section breaks / section metadata.
+ * Driven by payload.template.sections from page-templates.json
+ * (homepage: 5 sections → 4 breaks; about-us: 5 sections → 4 breaks;
+ * magazine: 7 sections → 6 breaks; adventure-detail: 3 sections → 2 breaks;
+ * adventure-index: 5 sections → 4 breaks).
+ * homepage section selectors verified against migration-work/cleaned.html:
+ * sec1 hero carousel (div.carousel.cmp-carousel--hero, line 165 — first section → no
+ * break; its carousel-hero parser replaces the whole div between hooks but sec1 gets no
+ * <hr> anyway), sec2 featured teaser (div.teaser.cmp-teaser--featured, line 256),
+ * sec3 recent-articles grid (nested main.container.cmp-layout-container--fixed
+ * :nth-of-type(1), line 253 — the cards parser targets the inner div.image-list.list,
+ * line 281, not this wrapper, so the before()-inserted <hr> survives), sec4 next-adventures
+ * teaser (div.teaser.cmp-teaser--hero.cmp-teaser--imagebottom, line 364), sec5 where-to-go
+ * grid (nested main.container.cmp-layout-container--fixed :nth-of-type(2), line 383, inner
+ * image-list at line 391). All style: null → 4 bare <hr>, no Section Metadata blocks.
+ * adventure-index section selectors verified against migration-work/cleaned.html:
+ * sec1 page-title (nested main.container ... :nth-of-type(1), first section → no break),
+ * sec2 hero teaser (div.teaser.cmp-teaser--hero, line 174), sec3 "Current Adventures"
+ * heading (div.title.cmp-title--underline, line 195), sec4 adventure grid
+ * (div.tabs.panelcontainer, line 200 — survives parsing because the cards parser targets
+ * only the inner .cmp-tabs__tabpanel--active .image-list.list, not this wrapper, so the
+ * before()-inserted <hr> stays put), sec5 separator (div.separator, line 728). All
+ * style: null → 4 bare <hr>, no Section Metadata blocks.
+ * Template-agnostic: reads payload.template.sections at runtime, so it adapts to
+ * whichever template's section count is passed in. All magazine section selectors
+ * verified against migration-work/cleaned.html (rc1 title, rc2 teaser, rc3/rc5
+ * title--underline, rc4 image-list, rc6 text, rc7 separator).
+ * adventure-detail section selectors verified against migration-work/cleaned.html:
+ * rc1 breadcrumb (div.breadcrumb.cmp-breadcrumb--fixed, kept as default content),
+ * rc2 hero carousel (div.carousel.cmp-carousel--mini), rc3 nested detail layout
+ * (main.cmp-layout-container--fixed — the --fixed class disambiguates the nested
+ * inner main from the outer main.container that lacks it). All three are direct
+ * siblings under the same aem-Grid, so before()-inserted <hr> breaks land between them.
+ * All sections have style: null, so no Section Metadata blocks are emitted;
+ * this inserts an <hr> before every non-first section.
+ *
+ * Breaks are inserted in beforeTransform (while every section element still
+ * exists, before block parsers replace matched elements). Section Metadata,
+ * when a section has a style, is anchored in afterTransform to a marker <hr>.
+ * Sections are processed in reverse so live-element inserts never shift
+ * not-yet-processed sections. See references/generate-import-transformer.md.
+ */
+const SECTION_MARKER_ATTR = 'data-excat-section-id';
+
+export default function transform(hookName, element, payload) {
+  const sections = (payload.template && payload.template.sections) || [];
+
+  if (hookName === 'beforeTransform') {
+    for (let i = sections.length - 1; i >= 0; i -= 1) {
+      const section = sections[i];
+      if (i === 0 && !section.style) continue; // first section: no leading break, no metadata
+      const sectionEl = element.querySelector(section.selector);
+      if (!sectionEl) continue; // selector didn't match this page — skip, never guess
+
+      const hr = document.createElement('hr');
+      if (section.style) hr.setAttribute(SECTION_MARKER_ATTR, section.id);
+      sectionEl.before(hr);
+    }
+  }
+
+  if (hookName === 'afterTransform') {
+    for (let i = sections.length - 1; i >= 0; i -= 1) {
+      const section = sections[i];
+      if (!section.style) continue; // no styled sections in about-us → this loop is a no-op
+
+      const marker = element.querySelector(`[${SECTION_MARKER_ATTR}="${section.id}"]`);
+      const anchor = marker || element.querySelector(section.selector);
+      if (!anchor) continue;
+
+      const metadataBlock = WebImporter.Blocks.createBlock(document, {
+        name: 'Section Metadata',
+        cells: { style: section.style },
+      });
+      anchor.after(metadataBlock);
+
+      if (marker) {
+        marker.removeAttribute(SECTION_MARKER_ATTR);
+        if (i === 0) marker.remove();
+      }
+    }
+  }
+}

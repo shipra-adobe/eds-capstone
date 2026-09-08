@@ -1,37 +1,45 @@
+/* Block: hero — full-bleed banner image (WKND adventure detail)
+ * Values extracted from source computed styles:
+ * img height 400px, min-height 400px, object-fit cover, object-position 50% 50%,
+ * full-bleed width (no max-width, no padding, no border-radius). Same mobile + desktop.
+ * No heading overlay — the adventure title is separate default content below.
+ */
+
+/* Full-bleed: override EDS section max-width (1200px) + horizontal padding */
+.hero-wrapper {
+  max-width: none;
+  padding: 0;
+}
+
 .hero-container .hero-wrapper {
-  max-width: unset;
+  max-width: none;
   padding: 0;
 }
 
 .hero {
-  position: relative;
-  padding: 40px 24px;
-  min-height: 300px;
+  margin: 0;
+  padding: 0;
 }
 
-.hero h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--background-color);
+/* Rows/cells carry no spacing — the image fills edge to edge */
+.hero > div,
+.hero > div > div {
+  margin: 0;
+  padding: 0;
 }
 
 .hero picture {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  object-fit: cover;
-  box-sizing: border-box;
+  display: block;
+  line-height: 0;
 }
 
-.hero img {
-  object-fit: cover;
+/* Higher specificity than global `main img { width: auto; height: auto }` */
+.hero picture img {
+  display: block;
   width: 100%;
-  height: 100%;
-}
-
-@media (width >= 900px) {
-  .hero {
-    padding: 40px 32px;
-  }
+  height: 400px;
+  min-height: 400px;
+  max-width: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
 }

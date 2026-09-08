@@ -1,0 +1,22 @@
+{
+  "variantName": "fragment",
+  "baseBlock": "fragment",
+  "version": "1.0.0",
+  "created": "2026-09-01T00:00:00.000Z",
+  "visualCharacteristics": {
+    "colorScheme": "inherit",
+    "density": "comfortable",
+    "purpose": "Includes the content of another document inline as a reusable fragment",
+    "imagePattern": "inherited from the referenced fragment"
+  },
+  "contentPattern": {
+    "structure": "one cell containing a link to the fragment path",
+    "buttonCount": 0,
+    "imageCount": 0
+  },
+  "usage": {
+    "pagesUsing": [],
+    "reuseCount": 0,
+    "lastUsed": "2026-09-01T00:00:00.000Z"
+  }
+}

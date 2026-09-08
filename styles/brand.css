@@ -1,0 +1,17 @@
+:root {
+  --heading-font-family: "Asar", georgia, "Times New Roman", times, serif;
+  --body-font-family: "Source Sans Pro", "Helvetica Neue", helvetica, arial, sans-serif;
+  --background-color: #fff;
+  --text-color: #202020;
+  --link-color: #202020;
+  --link-hover-color: #ebeb00;
+  --accent-color: #ffea00;
+  --section-padding: 10px;
+  --nav-height: 64px;
+  --heading-size-xxl: 40px;
+  --heading-size-xl: 36px;
+  --heading-size-l: 24px;
+  --heading-size-m: 16px;
+  --heading-size-s: 14px;
+  --heading-size-xs: 16px;
+}
