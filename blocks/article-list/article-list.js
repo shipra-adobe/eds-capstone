@@ -1,4 +1,4 @@
-import { createOptimizedPicture } from '../../scripts/aem.js';
+import { createOptimizedPicture, toClassName } from '../../scripts/aem.js';
 
 /**
  * Reads block config from authored rows.
@@ -6,13 +6,15 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
  *   - a path / link to a query-index (e.g. `/us/en/magazine/query-index.json`
  *     or a bare folder `/us/en/magazine`)
  *   - `limit | <n>` to cap the number of cards rendered
+ *   - `tabs | true` to render category filter tabs (needs a `category` field)
  * Backward compatible with a single cell containing just the index path.
  * @param {Element} block The article-list block element
- * @returns {{ indexPath: string, limit: number|null }}
+ * @returns {{ indexPath: string, limit: number|null, tabs: boolean }}
  */
 function parseConfig(block) {
   let indexPath = '';
   let limit = null;
+  let tabs = false;
 
   const link = block.querySelector('a[href]');
   if (link) indexPath = new URL(link.href, window.location.origin).pathname;
@@ -25,6 +27,10 @@ function parseConfig(block) {
     if (key === 'limit' && val) {
       const n = parseInt(val, 10);
       if (!Number.isNaN(n) && n > 0) limit = n;
+      return;
+    }
+    if (key === 'tabs') {
+      tabs = !val || /^(true|yes|on)$/i.test(val);
       return;
     }
 
@@ -43,17 +49,18 @@ function parseConfig(block) {
     indexPath = `${base}/query-index.json`;
   }
 
-  return { indexPath, limit };
+  return { indexPath, limit, tabs };
 }
 
 /**
  * Builds a single article card list item from an index row.
  * Mirrors the authored `.cards.articles` markup so styling stays consistent.
- * @param {object} row A query-index entry ({ path, title, description, image })
+ * @param {object} row A query-index entry ({ path, title, description, image, category })
  * @returns {HTMLLIElement}
  */
 function buildCard(row) {
   const li = document.createElement('li');
+  if (row.category) li.dataset.category = toClassName(row.category);
 
   const imageCell = document.createElement('div');
   imageCell.className = 'article-list-card-image';
@@ -83,13 +90,48 @@ function buildCard(row) {
 }
 
 /**
+ * Builds the category filter tab bar and wires click filtering.
+ * Renders "All" plus one tab per distinct category (first-seen order).
+ * @param {HTMLUListElement} ul The rendered card list
+ * @param {string[]} categories Distinct display category labels, in order
+ * @returns {HTMLElement} The tab bar element
+ */
+function buildTabs(ul, categories) {
+  const nav = document.createElement('div');
+  nav.className = 'article-list-tabs';
+
+  const makeTab = (label, value) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'article-list-tab';
+    btn.textContent = label;
+    btn.dataset.filter = value;
+    btn.addEventListener('click', () => {
+      nav.querySelectorAll('.article-list-tab').forEach((t) => t.classList.remove('active'));
+      btn.classList.add('active');
+      ul.querySelectorAll(':scope > li').forEach((li) => {
+        const show = value === '*' || li.dataset.category === value;
+        li.hidden = !show;
+      });
+    });
+    return btn;
+  };
+
+  const all = makeTab('All', '*');
+  all.classList.add('active');
+  nav.append(all);
+  categories.forEach((label) => nav.append(makeTab(label, toClassName(label))));
+  return nav;
+}
+
+/**
  * Decorates an article-list block: fetches a query-index and renders a
  * self-updating grid of article cards (index order preserved). Supports an
- * optional `limit` to cap the number of cards (e.g. a "recent 4" teaser).
+ * optional `limit` (e.g. a "recent 4" teaser) and optional category `tabs`.
  * @param {Element} block The article-list block element
  */
 export default async function decorate(block) {
-  const { indexPath, limit } = parseConfig(block);
+  const { indexPath, limit, tabs } = parseConfig(block);
   block.textContent = '';
 
   try {
@@ -98,7 +140,6 @@ export default async function decorate(block) {
     const json = await resp.json();
     const rows = Array.isArray(json.data) ? json.data : [];
 
-    const ul = document.createElement('ul');
     // keep index order; drop the current listing page if it appears in its own index
     const listingPath = window.location.pathname.replace(/\/$/, '');
     let visible = rows.filter(
@@ -106,7 +147,18 @@ export default async function decorate(block) {
     );
     if (limit) visible = visible.slice(0, limit);
 
+    const ul = document.createElement('ul');
     visible.forEach((row) => ul.append(buildCard(row)));
+
+    // distinct categories, sorted alphabetically (matches source tab order:
+    // ALL, CLIMBING, CYCLING, SKIING, SURFING, TRAVEL)
+    if (tabs) {
+      const categories = [...new Set(
+        visible.map((row) => (row.category || '').trim()).filter(Boolean),
+      )].sort((a, b) => a.localeCompare(b));
+      if (categories.length) block.append(buildTabs(ul, categories));
+    }
+
     block.append(ul);
   } catch (error) {
     // eslint-disable-next-line no-console
