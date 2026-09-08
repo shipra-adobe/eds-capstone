@@ -6,6 +6,38 @@
  * Sans Pro uppercase muted descriptions.
  */
 
+/* category filter tabs — source: uppercase text tabs, active/hover is a dark
+ * chip (#202020 bg, white text). WKND adventures page tab row. */
+.article-list-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0 0 28px;
+}
+
+.article-list-tab {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 12px 20px;
+  background-color: transparent;
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.article-list-tab:hover,
+.article-list-tab.active {
+  background-color: var(--dark-color);
+  color: #fff;
+}
+
 .article-list > ul {
   list-style: none;
   margin: 0;
