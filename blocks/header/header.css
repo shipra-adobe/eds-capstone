@@ -1,6 +1,15 @@
 /* WKND header — dark utility bar above a white main nav bar.
    Mobile-first: base styles are the mobile drawer; @media (width >= 900px) is desktop. */
 
+/* the mobile nav-wrapper is fixed (out of flow) and stacks two rows — the
+   logo/hamburger row plus the search row — so it is ~2x --nav-height tall.
+   styles.css reserves only --nav-height for the header, which let the fixed
+   nav cover the top of the page content (e.g. the FAQs H1 sat behind the
+   search row). Reserve the full two-row height so content starts below it. */
+header {
+  height: calc(var(--nav-height) * 2);
+}
+
 header .nav-wrapper {
   width: 100%;
   z-index: 2;
@@ -197,6 +206,14 @@ header nav[aria-expanded='true'] {
 }
 
 @media (width >= 900px) {
+  /* the desktop nav (dark utility strip + tall white logo/nav row) is ~183px,
+     but styles.css reserves only --nav-height (64px) for the header, so the nav
+     overflows and paints over the top of the page content (e.g. the FAQs H1 and
+     the "Need more help?" sidebar). Let the header size to its real content. */
+  header {
+    height: auto;
+  }
+
   header .nav-wrapper {
     position: relative;
   }

@@ -657,14 +657,20 @@ body.magazine-article main .section:last-of-type li a:hover {
     padding: 0 24px;
   }
 
-  body.faqs main > .section.accordion-faq-container {
-    grid-column: 1;
+  /* the grid handles placement; drop the default per-section vertical spacing
+     so the sidebar top-aligns with the FAQ heading instead of dropping 40px */
+  body.faqs main > .section {
     margin: 0;
   }
 
-  body.faqs main > .section:last-of-type {
+  body.faqs main > .section.accordion-faq-container {
+    grid-column: 1;
+  }
+
+  /* the "Need more help?" contact sidebar (plus any trailing empty
+     metadata section, which is harmless and simply stacks below it) */
+  body.faqs main > .section:not(.accordion-faq-container) {
     grid-column: 2;
-    margin: 0;
   }
 
   /* wrappers fill their grid column instead of re-centering at 1200px */
@@ -688,12 +694,12 @@ body.faqs main h1::after {
 
 /* "Need more help?" contact links (phone + email) render blue in the source */
 /* stylelint-disable-next-line no-descending-specificity */
-body.faqs main .section:last-of-type a {
+body.faqs main .section:not(.accordion-faq-container) a {
   color: rgb(0 69 255);
   text-decoration: none;
 }
 
 /* stylelint-disable-next-line no-descending-specificity */
-body.faqs main .section:last-of-type a:hover {
+body.faqs main .section:not(.accordion-faq-container) a:hover {
   text-decoration: underline;
 }
