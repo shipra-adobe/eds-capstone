@@ -1,24 +1,49 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
 /**
- * Resolves the query-index path this list should read from.
- * Priority: an authored link/path in the block, else derived from the current
- * page path (e.g. /us/en/magazine -> /us/en/magazine/query-index.json).
+ * Reads block config from authored rows.
+ * Supported rows (any order, all optional):
+ *   - a path / link to a query-index (e.g. `/us/en/magazine/query-index.json`
+ *     or a bare folder `/us/en/magazine`)
+ *   - `limit | <n>` to cap the number of cards rendered
+ * Backward compatible with a single cell containing just the index path.
  * @param {Element} block The article-list block element
- * @returns {string} Absolute path to a query-index.json
+ * @returns {{ indexPath: string, limit: number|null }}
  */
-function resolveIndexPath(block) {
-  const link = block.querySelector('a[href]');
-  if (link) return new URL(link.href, window.location.origin).pathname;
+function parseConfig(block) {
+  let indexPath = '';
+  let limit = null;
 
-  const authored = block.textContent.trim();
-  if (authored) {
-    // accept either a full ".../query-index.json" or a bare folder path
-    return authored.endsWith('.json') ? authored : `${authored.replace(/\/$/, '')}/query-index.json`;
+  const link = block.querySelector('a[href]');
+  if (link) indexPath = new URL(link.href, window.location.origin).pathname;
+
+  [...block.children].forEach((row) => {
+    const cells = [...row.children];
+    const key = (cells[0]?.textContent || '').trim().toLowerCase();
+    const val = (cells[1]?.textContent || '').trim();
+
+    if (key === 'limit' && val) {
+      const n = parseInt(val, 10);
+      if (!Number.isNaN(n) && n > 0) limit = n;
+      return;
+    }
+
+    // otherwise treat any non-empty text as a possible index path
+    if (!indexPath) {
+      const text = (cells[0]?.textContent || row.textContent || '').trim();
+      if (text) indexPath = text;
+    }
+  });
+
+  if (indexPath && !indexPath.endsWith('.json')) {
+    indexPath = `${indexPath.replace(/\/$/, '')}/query-index.json`;
+  }
+  if (!indexPath) {
+    const base = window.location.pathname.replace(/\/$/, '');
+    indexPath = `${base}/query-index.json`;
   }
 
-  const base = window.location.pathname.replace(/\/$/, '');
-  return `${base}/query-index.json`;
+  return { indexPath, limit };
 }
 
 /**
@@ -53,18 +78,18 @@ function buildCard(row) {
     body.append(p);
   }
 
-  // make the whole card clickable via the title link target
   li.append(imageCell, body);
   return li;
 }
 
 /**
  * Decorates an article-list block: fetches a query-index and renders a
- * self-updating grid of article cards (index order preserved).
+ * self-updating grid of article cards (index order preserved). Supports an
+ * optional `limit` to cap the number of cards (e.g. a "recent 4" teaser).
  * @param {Element} block The article-list block element
  */
 export default async function decorate(block) {
-  const indexPath = resolveIndexPath(block);
+  const { indexPath, limit } = parseConfig(block);
   block.textContent = '';
 
   try {
@@ -74,12 +99,14 @@ export default async function decorate(block) {
     const rows = Array.isArray(json.data) ? json.data : [];
 
     const ul = document.createElement('ul');
-    // keep index order; drop the listing page itself if it ever appears
+    // keep index order; drop the current listing page if it appears in its own index
     const listingPath = window.location.pathname.replace(/\/$/, '');
-    rows
-      .filter((row) => row.path && row.path.replace(/\/$/, '') !== listingPath)
-      .forEach((row) => ul.append(buildCard(row)));
+    let visible = rows.filter(
+      (row) => row.path && row.path.replace(/\/$/, '') !== listingPath,
+    );
+    if (limit) visible = visible.slice(0, limit);
 
+    visible.forEach((row) => ul.append(buildCard(row)));
     block.append(ul);
   } catch (error) {
     // eslint-disable-next-line no-console
